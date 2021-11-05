@@ -47,7 +47,6 @@ impl_state!(GcPcSaft, PyGcPcSaft);
 impl_state_molarweight!(GcPcSaft, PyGcPcSaft);
 impl_vle_state!(GcPcSaft, PyGcPcSaft);
 
-#[pymodule]
 pub fn gc_pcsaft_eos(_: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_class::<PyGcPcSaft>()?;
     m.add_class::<PyState>()?;

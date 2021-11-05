@@ -5,9 +5,9 @@ use pyo3::prelude::*;
 use pyo3::wrap_pymodule;
 use quantity::python::PyInit_quantity;
 
-pub mod eos;
+mod eos;
 use eos::*;
-pub mod parameters;
+mod parameters;
 use parameters::*;
 
 #[pymodule]
@@ -26,13 +26,16 @@ pub fn feos_gc_pcsaft(py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_class::<PyBinarySegmentRecord>()?;
     m.add_class::<PyGcPcSaftParameters>()?;
 
-    m.add_wrapped(wrap_pymodule!(gc_pcsaft_eos))?;
+    let eos = PyModule::new(py, "eos")?;
+    gc_pcsaft_eos(py, eos)?;
+    m.add_submodule(eos)?;
+
     m.add_wrapped(wrap_pymodule!(quantity))?;
 
     py.run(
         "\
 import sys
-sys.modules['feos_gc_pcsaft.eos'] = gc_pcsaft_eos
+sys.modules['feos_gc_pcsaft.eos'] = eos
 sys.modules['feos_gc_pcsaft.si'] = quantity
     ",
         None,

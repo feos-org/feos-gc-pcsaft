@@ -1,9 +1,8 @@
 [package]
 name = "feos-gc-pcsaft"
 version = "0.1.0"
-authors = ["Gernot Bauer <bauer@itt.uni-stuttgart.de>", "Philipp Rehner <rehner@itt.uni-stuttgart.de>"]
+authors = ["Philipp Rehner <prehner@ethz.ch>", "Gernot Bauer <bauer@itt.uni-stuttgart.de>"]
 edition = "2018"
-workspace = ".."
 
 [lib]
 name = "feos_gc_pcsaft"
@@ -34,7 +33,7 @@ optional = true
 
 [features]
 default = []
-python = ["pyo3", "quantity/python", "feos-core/python", "numpy"]
+python = ["pyo3", "numpy", "feos-dft/python"]
 openblas-system = ["feos-core/openblas-system"]
 openblas-static = ["feos-core/openblas-static"]
 intel-mkl-system = ["feos-core/intel-mkl-system"]
