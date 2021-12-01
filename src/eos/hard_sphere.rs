@@ -1,4 +1,5 @@
-use crate::parameters::GcPcSaftParameters;
+use super::GcPcSaftEosParameters;
+use crate::parameter::GcPcSaftParameters;
 use feos_core::{HelmholtzEnergyDual, StateHD};
 use ndarray::*;
 use num_dual::DualNum;
@@ -6,7 +7,7 @@ use std::f64::consts::FRAC_PI_6;
 use std::fmt;
 use std::rc::Rc;
 
-impl GcPcSaftParameters {
+impl<B> GcPcSaftParameters<B> {
     pub fn hs_diameter<D: DualNum<f64>>(&self, temperature: D) -> Array1<D> {
         let ti = temperature.recip() * -3.0;
         Array::from_shape_fn(self.sigma.len(), |i| {
@@ -17,7 +18,7 @@ impl GcPcSaftParameters {
 
 #[derive(Clone)]
 pub struct HardSphere {
-    pub parameters: Rc<GcPcSaftParameters>,
+    pub parameters: Rc<GcPcSaftEosParameters>,
 }
 
 impl<D: DualNum<f64>> HelmholtzEnergyDual<D> for HardSphere {
@@ -45,7 +46,7 @@ impl fmt::Display for HardSphere {
 }
 
 pub(crate) fn zeta<D: DualNum<f64>, const N: usize>(
-    parameters: &GcPcSaftParameters,
+    parameters: &GcPcSaftEosParameters,
     diameter: &Array1<D>,
     partial_density: &Array1<D>,
     k: [i32; N],
@@ -63,7 +64,7 @@ pub(crate) fn zeta<D: DualNum<f64>, const N: usize>(
 }
 
 fn zeta_23<D: DualNum<f64>>(
-    parameters: &GcPcSaftParameters,
+    parameters: &GcPcSaftEosParameters,
     diameter: &Array1<D>,
     molefracs: &Array1<D>,
 ) -> D {
@@ -82,7 +83,7 @@ fn zeta_23<D: DualNum<f64>>(
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::parameters::test::*;
+    use crate::eos::parameter::test::*;
     use approx::assert_relative_eq;
     use feos_core::EosUnit;
     use num_dual::Dual64;

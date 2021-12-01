@@ -1,5 +1,6 @@
 use super::hard_sphere::zeta;
-use crate::parameters::GcPcSaftParameters;
+use super::GcPcSaftEosParameters;
+use crate::parameter::GcPcSaftParameters;
 use feos_core::{EosError, HelmholtzEnergyDual, StateHD};
 use ndarray::*;
 use ndarray_linalg::Norm;
@@ -9,29 +10,30 @@ use std::rc::Rc;
 
 #[derive(Clone)]
 pub struct Association {
-    pub parameters: Rc<GcPcSaftParameters>,
+    pub parameters: Rc<GcPcSaftEosParameters>,
 }
 
 #[derive(Clone)]
 pub struct CrossAssociation {
-    pub parameters: Rc<GcPcSaftParameters>,
+    pub parameters: Rc<GcPcSaftEosParameters>,
     pub max_iter: usize,
     pub tol: f64,
 }
 
-fn association_strength<D: DualNum<f64>>(
-    p: &GcPcSaftParameters,
+fn association_strength<D: DualNum<f64>, B>(
+    p: &GcPcSaftParameters<B>,
     temperature: D,
     diameter: &Array1<D>,
     n2: D,
     n3i: D,
+    xi: D,
     i: usize,
     j: usize,
 ) -> D {
     let ai = p.assoc_segment[i];
     let aj = p.assoc_segment[j];
     let k = diameter[ai] * diameter[aj] / (diameter[ai] + diameter[aj]) * (n2 * n3i);
-    n3i * (k * (k / 18.0 + 0.5) + 1.0)
+    n3i * (k * xi * (k / 18.0 + 0.5) + 1.0)
         * p.sigma3_kappa_aibj[(i, j)]
         * (temperature.recip() * p.epsilon_k_aibj[(i, j)]).exp_m1()
 }
@@ -50,8 +52,9 @@ impl<D: DualNum<f64>> HelmholtzEnergyDual<D> for Association {
         let n3i = (-n3 + 1.0).recip();
 
         // association strength
-        let deltarho = association_strength(p, state.temperature, &diameter, n2, n3i, 0, 0)
-            * state.partial_density[c];
+        let deltarho =
+            association_strength(p, state.temperature, &diameter, n2, n3i, D::one(), 0, 0)
+                * state.partial_density[c];
 
         let na = p.na[0];
         let nb = p.nb[0];
@@ -109,57 +112,77 @@ where
         let n3 = zeta(p, &diameter, &state.partial_density, [3])[0];
         let n3i = (-n3 + 1.0).recip();
 
-        // association strength
-        let nassoc = p.assoc_segment.len();
-        let delta = Array::from_shape_fn([nassoc; 2], |(i, j)| {
-            association_strength(p, state.temperature, &diameter, n2, n3i, i, j)
-        });
-
         // extract densities of associating segments
-        let rho = Array::from_shape_fn(nassoc, |i| {
-            state.partial_density[p.component_index[p.assoc_segment[i]]]
-        });
+        let rho_assoc = p
+            .assoc_segment
+            .mapv(|a| state.partial_density[p.component_index[a]]);
 
-        // cross-association according to Michelsen2006
-        // initialize monomer fraction
-        let mut x = Array::from_elem(2 * nassoc, 0.2);
-        for k in 0..self.max_iter {
-            if newton_step_cross_association::<f64>(
-                &mut x,
-                nassoc,
-                &delta.map(D::re),
-                &p.na,
-                &p.nb,
-                &rho.map(D::re),
-                self.tol,
-            )
-            .unwrap()
-            {
-                break;
-            }
-            if k == self.max_iter - 1 {
-                Err(EosError::NotConverged("Cross association".into())).unwrap()
-            }
-        }
-        // calculate derivatives
-        let mut x_dual = x.mapv(D::from);
-        for _ in 0..D::NDERIV {
-            newton_step_cross_association(
-                &mut x_dual,
-                nassoc,
-                &delta,
-                &p.na,
-                &p.nb,
-                &rho,
-                self.tol,
-            )
-            .unwrap();
-        }
-        // Helmholtz energy density
-        let xa = x_dual.slice(s![..nassoc]);
-        let xb = x_dual.slice(s![nassoc..]);
-        let f = |x: D| x.ln() - x * 0.5 + 0.5;
-        (rho * (xa.mapv(f) * &p.na + xb.mapv(f) * &p.nb)).sum() * state.volume
+        helmholtz_energy_density_cross_association(
+            p,
+            state.temperature,
+            &rho_assoc,
+            &diameter,
+            n2,
+            n3i,
+            D::one(),
+            self.max_iter,
+            self.tol,
+            None,
+        )
+        .unwrap()
+            * state.volume
+
+        // // association strength
+        // let nassoc = p.assoc_segment.len();
+        // let delta = Array::from_shape_fn([nassoc; 2], |(i, j)| {
+        //     association_strength(p, state.temperature, &diameter, n2, n3i, i, j)
+        // });
+
+        // // extract densities of associating segments
+        // let rho = Array::from_shape_fn(nassoc, |i| {
+        //     state.partial_density[p.component_index[p.assoc_segment[i]]]
+        // });
+
+        // // cross-association according to Michelsen2006
+        // // initialize monomer fraction
+        // let mut x = Array::from_elem(2 * nassoc, 0.2);
+        // for k in 0..self.max_iter {
+        //     if newton_step_cross_association::<f64>(
+        //         &mut x,
+        //         nassoc,
+        //         &delta.map(D::re),
+        //         &p.na,
+        //         &p.nb,
+        //         &rho.map(D::re),
+        //         self.tol,
+        //     )
+        //     .unwrap()
+        //     {
+        //         break;
+        //     }
+        //     if k == self.max_iter - 1 {
+        //         Err(EosError::NotConverged("Cross association".into())).unwrap()
+        //     }
+        // }
+        // // calculate derivatives
+        // let mut x_dual = x.mapv(D::from);
+        // for _ in 0..D::NDERIV {
+        //     newton_step_cross_association(
+        //         &mut x_dual,
+        //         nassoc,
+        //         &delta,
+        //         &p.na,
+        //         &p.nb,
+        //         &rho,
+        //         self.tol,
+        //     )
+        //     .unwrap();
+        // }
+        // // Helmholtz energy density
+        // let xa = x_dual.slice(s![..nassoc]);
+        // let xb = x_dual.slice(s![nassoc..]);
+        // let f = |x: D| x.ln() - x * 0.5 + 0.5;
+        // (rho * (xa.mapv(f) * &p.na + xb.mapv(f) * &p.nb)).sum() * state.volume
     }
 }
 
@@ -169,16 +192,87 @@ impl fmt::Display for CrossAssociation {
     }
 }
 
-fn newton_step_cross_association<D: DualNum<f64> + ScalarOperand>(
+pub fn helmholtz_energy_density_cross_association<S, D: DualNum<f64> + ScalarOperand, B>(
+    p: &GcPcSaftParameters<B>,
+    temperature: D,
+    density: &ArrayBase<S, Ix1>,
+    diameter: &Array1<D>,
+    n2: D,
+    n3i: D,
+    xi: D,
+    max_iter: usize,
+    tol: f64,
+    x0: Option<&mut Array1<f64>>,
+) -> Result<D, EosError>
+where
+    S: Data<Elem = D>,
+    Array2<D>: SolveDual<D>,
+{
+    // check if density is close to 0
+    if density.sum().re() < f64::EPSILON {
+        x0.map(|x0| x0.fill(1.0));
+        return Ok(D::zero());
+    }
+
+    // number of associating segments
+    let nassoc = p.assoc_segment.len();
+
+    // association strength
+    let delta = Array::from_shape_fn([nassoc; 2], |(i, j)| {
+        association_strength(p, temperature, diameter, n2, n3i, xi, i, j)
+    });
+
+    // cross-association according to Michelsen2006
+    // initialize monomer fraction
+    let mut x = match &x0 {
+        Some(x0) => (*x0).clone(),
+        None => Array::from_elem(2 * nassoc, 0.2),
+    };
+
+    for k in 0..max_iter {
+        if newton_step_cross_association::<_, f64>(
+            &mut x,
+            nassoc,
+            &delta.map(D::re),
+            &p.na,
+            &p.nb,
+            &density.map(D::re),
+            tol,
+        )? {
+            break;
+        }
+        if k == max_iter - 1 {
+            return Err(EosError::NotConverged("Cross association".into()));
+        }
+    }
+
+    // calculate derivatives
+    let mut x_dual = x.mapv(D::from);
+    for _ in 0..D::NDERIV {
+        newton_step_cross_association(&mut x_dual, nassoc, &delta, &p.na, &p.nb, density, tol)?;
+    }
+
+    // save monomer fraction
+    x0.map(|x0| *x0 = x);
+
+    // Helmholtz energy density
+    let xa = x_dual.slice(s![..nassoc]);
+    let xb = x_dual.slice(s![nassoc..]);
+    let f = |x: D| x.ln() - x * 0.5 + 0.5;
+    Ok((density * (xa.mapv(f) * &p.na + xb.mapv(f) * &p.nb)).sum())
+}
+
+fn newton_step_cross_association<S, D: DualNum<f64> + ScalarOperand>(
     x: &mut Array1<D>,
     nassoc: usize,
     delta: &Array2<D>,
     na: &Array1<f64>,
     nb: &Array1<f64>,
-    rho: &Array1<D>,
+    rho: &ArrayBase<S, Ix1>,
     tol: f64,
 ) -> Result<bool, EosError>
 where
+    S: Data<Elem = D>,
     Array2<D>: SolveDual<D>,
 {
     // gradient
@@ -221,7 +315,7 @@ where
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::parameters::test::*;
+    use crate::eos::parameter::test::*;
     use approx::assert_relative_eq;
     use feos_core::EosUnit;
     use ndarray::arr1;

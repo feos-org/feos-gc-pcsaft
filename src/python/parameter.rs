@@ -1,6 +1,10 @@
-use crate::parameters::{GcPcSaftParameters, GcPcSaftRecord};
+use crate::dft::GcPcSaftFunctionalParameters;
+use crate::eos::GcPcSaftEosParameters;
+use crate::parameter::GcPcSaftRecord;
 use feos_core::joback::JobackRecord;
-use feos_core::parameter::{IdentifierOption, NoRecord, ParameterError, PureRecord, SegmentRecord};
+use feos_core::parameter::{
+    BinaryRecord, IdentifierOption, NoRecord, ParameterError, PureRecord, SegmentRecord,
+};
 use feos_core::python::joback::PyJobackRecord;
 use feos_core::python::parameter::{
     PyBinarySegmentRecord, PyChemicalRecord, PyIdentifier, PyNoRecord,
@@ -10,6 +14,7 @@ use feos_core::{
 };
 use pyo3::prelude::*;
 use std::convert::TryFrom;
+use std::rc::Rc;
 
 #[pyclass(name = "GcPcSaftRecord", unsendable)]
 #[pyo3(
@@ -63,24 +68,47 @@ impl_segment_record!(
     PyJobackRecord
 );
 
-#[pyclass(name = "GcPcSaftParameters", unsendable)]
+#[pyclass(name = "GcPcSaftEosParameters", unsendable)]
 #[pyo3(
     text_signature = "(pure_records, segmentbinary_records=None, substances=None, search_option='Name')"
 )]
 #[derive(Clone)]
-pub struct PyGcPcSaftParameters(pub GcPcSaftParameters);
+pub struct PyGcPcSaftEosParameters(pub Rc<GcPcSaftEosParameters>);
 
-impl_parameter_from_segments!(GcPcSaftParameters, PyGcPcSaftParameters);
+impl_parameter_from_segments!(GcPcSaftEosParameters, PyGcPcSaftEosParameters);
 
 #[pymethods]
-impl PyGcPcSaftParameters {
+impl PyGcPcSaftEosParameters {
     fn _repr_markdown_(&self) -> String {
         self.0.to_markdown()
     }
 }
 
 #[pyproto]
-impl pyo3::class::basic::PyObjectProtocol for PyGcPcSaftParameters {
+impl pyo3::class::basic::PyObjectProtocol for PyGcPcSaftEosParameters {
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(self.0.to_string())
+    }
+}
+
+#[pyclass(name = "GcPcSaftFunctionalParameters", unsendable)]
+#[pyo3(
+    text_signature = "(pure_records, segmentbinary_records=None, substances=None, search_option='Name')"
+)]
+#[derive(Clone)]
+pub struct PyGcPcSaftFunctionalParameters(pub Rc<GcPcSaftFunctionalParameters>);
+
+impl_parameter_from_segments!(GcPcSaftFunctionalParameters, PyGcPcSaftFunctionalParameters);
+
+#[pymethods]
+impl PyGcPcSaftFunctionalParameters {
+    fn _repr_markdown_(&self) -> String {
+        self.0.to_markdown()
+    }
+}
+
+#[pyproto]
+impl pyo3::class::basic::PyObjectProtocol for PyGcPcSaftFunctionalParameters {
     fn __repr__(&self) -> PyResult<String> {
         Ok(self.0.to_string())
     }

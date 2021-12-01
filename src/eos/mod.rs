@@ -1,4 +1,3 @@
-use crate::parameters::GcPcSaftParameters;
 use feos_core::joback::Joback;
 use feos_core::{EquationOfState, HelmholtzEnergy, IdealGasContribution, MolarWeight};
 use ndarray::Array1;
@@ -6,14 +5,16 @@ use quantity::si::*;
 use std::f64::consts::FRAC_PI_6;
 use std::rc::Rc;
 
-mod association;
-mod dispersion;
+pub(crate) mod association;
+pub(crate) mod dispersion;
 mod hard_chain;
 mod hard_sphere;
+mod parameter;
 use association::{Association, CrossAssociation};
 use dispersion::Dispersion;
 use hard_chain::HardChain;
 use hard_sphere::HardSphere;
+pub use parameter::GcPcSaftEosParameters;
 
 #[derive(Copy, Clone)]
 pub struct GcPcSaftOptions {
@@ -33,19 +34,18 @@ impl Default for GcPcSaftOptions {
 }
 
 pub struct GcPcSaft {
-    parameters: Rc<GcPcSaftParameters>,
+    parameters: Rc<GcPcSaftEosParameters>,
     options: GcPcSaftOptions,
     contributions: Vec<Box<dyn HelmholtzEnergy>>,
     joback: Joback,
 }
 
 impl GcPcSaft {
-    pub fn new(parameters: GcPcSaftParameters) -> Self {
+    pub fn new(parameters: Rc<GcPcSaftEosParameters>) -> Self {
         Self::with_options(parameters, GcPcSaftOptions::default())
     }
 
-    pub fn with_options(parameters: GcPcSaftParameters, options: GcPcSaftOptions) -> Self {
-        let parameters = Rc::new(parameters);
+    pub fn with_options(parameters: Rc<GcPcSaftEosParameters>, options: GcPcSaftOptions) -> Self {
         let mut contributions: Vec<Box<dyn HelmholtzEnergy>> = Vec::with_capacity(7);
         contributions.push(Box::new(HardSphere {
             parameters: parameters.clone(),
@@ -85,7 +85,10 @@ impl EquationOfState for GcPcSaft {
     }
 
     fn subset(&self, component_list: &[usize]) -> Self {
-        Self::with_options(self.parameters.subset(component_list), self.options)
+        Self::with_options(
+            Rc::new(self.parameters.subset(component_list)),
+            self.options,
+        )
     }
 
     fn compute_max_density(&self, moles: &Array1<f64>) -> f64 {
