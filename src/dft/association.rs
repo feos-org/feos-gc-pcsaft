@@ -7,7 +7,7 @@ use feos_dft::{
     FunctionalContributionDual, WeightFunction, WeightFunctionInfo, WeightFunctionShape,
 };
 use ndarray::*;
-use num_dual::{DualNum, SolveDual};
+use num_dual::DualNum;
 use std::f64::consts::PI;
 use std::fmt;
 use std::ops::MulAssign;
@@ -35,7 +35,6 @@ impl AssociationFunctional {
 impl<N> FunctionalContributionDual<N> for AssociationFunctional
 where
     N: DualNum<f64> + ScalarOperand,
-    Array2<N>: SolveDual<N>,
 {
     fn weight_functions(&self, temperature: N) -> WeightFunctionInfo<N> {
         let p = &self.parameters;

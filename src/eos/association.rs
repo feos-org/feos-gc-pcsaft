@@ -3,7 +3,7 @@ use super::GcPcSaftEosParameters;
 use crate::parameter::GcPcSaftParameters;
 use feos_core::{EosError, HelmholtzEnergyDual, StateHD};
 use ndarray::*;
-use ndarray_linalg::Norm;
+use num_dual::linalg::{norm, LU};
 use num_dual::*;
 use std::fmt;
 use std::rc::Rc;
@@ -97,10 +97,7 @@ pub(crate) fn assoc_site_frac_a<D: DualNum<f64>>(deltarho: D, na: f64) -> D {
     }
 }
 
-impl<D: DualNum<f64> + ScalarOperand> HelmholtzEnergyDual<D> for CrossAssociation
-where
-    Array2<D>: SolveDual<D>,
-{
+impl<D: DualNum<f64> + ScalarOperand> HelmholtzEnergyDual<D> for CrossAssociation {
     fn helmholtz_energy(&self, state: &StateHD<D>) -> D {
         let p = &self.parameters;
 
@@ -206,11 +203,12 @@ pub fn helmholtz_energy_density_cross_association<S, D: DualNum<f64> + ScalarOpe
 ) -> Result<D, EosError>
 where
     S: Data<Elem = D>,
-    Array2<D>: SolveDual<D>,
 {
     // check if density is close to 0
     if density.sum().re() < f64::EPSILON {
-        x0.map(|x0| x0.fill(1.0));
+        if let Some(x0) = x0 {
+            x0.fill(1.0);
+        }
         return Ok(D::zero());
     }
 
@@ -253,7 +251,9 @@ where
     }
 
     // save monomer fraction
-    x0.map(|x0| *x0 = x);
+    if let Some(x0) = x0 {
+        *x0 = x;
+    }
 
     // Helmholtz energy density
     let xa = x_dual.slice(s![..nassoc]);
@@ -273,7 +273,6 @@ fn newton_step_cross_association<S, D: DualNum<f64> + ScalarOperand>(
 ) -> Result<bool, EosError>
 where
     S: Data<Elem = D>,
-    Array2<D>: SolveDual<D>,
 {
     // gradient
     let mut g: Array1<D> = Array::zeros(2 * nassoc);
@@ -306,10 +305,10 @@ where
     }
 
     // Newton step
-    x.assign(&(&*x - &h.solve(&g)?));
+    x.assign(&(&*x - &LU::new(h)?.solve(&g)));
 
     // check convergence
-    Ok(g.map(D::re).norm() < tol)
+    Ok(norm(&g.map(D::re)) < tol)
 }
 
 #[cfg(test)]
