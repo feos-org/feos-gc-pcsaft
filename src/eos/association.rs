@@ -1,6 +1,5 @@
 use super::hard_sphere::zeta;
 use super::GcPcSaftEosParameters;
-use crate::parameter::GcPcSaftParameters;
 use feos_core::{EosError, HelmholtzEnergyDual, StateHD};
 use ndarray::*;
 use num_dual::linalg::{norm, LU};
@@ -20,8 +19,10 @@ pub struct CrossAssociation {
     pub tol: f64,
 }
 
-fn association_strength<D: DualNum<f64>, B>(
-    p: &GcPcSaftParameters<B>,
+fn association_strength<D: DualNum<f64>>(
+    assoc_segment: &Array1<usize>,
+    sigma3_kappa_aibj: &Array2<f64>,
+    epsilon_k_aibj: &Array2<f64>,
     temperature: D,
     diameter: &Array1<D>,
     n2: D,
@@ -30,12 +31,12 @@ fn association_strength<D: DualNum<f64>, B>(
     i: usize,
     j: usize,
 ) -> D {
-    let ai = p.assoc_segment[i];
-    let aj = p.assoc_segment[j];
+    let ai = assoc_segment[i];
+    let aj = assoc_segment[j];
     let k = diameter[ai] * diameter[aj] / (diameter[ai] + diameter[aj]) * (n2 * n3i);
     n3i * (k * xi * (k / 18.0 + 0.5) + 1.0)
-        * p.sigma3_kappa_aibj[(i, j)]
-        * (temperature.recip() * p.epsilon_k_aibj[(i, j)]).exp_m1()
+        * sigma3_kappa_aibj[(i, j)]
+        * (temperature.recip() * epsilon_k_aibj[(i, j)]).exp_m1()
 }
 
 impl<D: DualNum<f64>> HelmholtzEnergyDual<D> for Association {
@@ -52,9 +53,18 @@ impl<D: DualNum<f64>> HelmholtzEnergyDual<D> for Association {
         let n3i = (-n3 + 1.0).recip();
 
         // association strength
-        let deltarho =
-            association_strength(p, state.temperature, &diameter, n2, n3i, D::one(), 0, 0)
-                * state.partial_density[c];
+        let deltarho = association_strength(
+            &p.assoc_segment,
+            &p.sigma3_kappa_aibj,
+            &p.epsilon_k_aibj,
+            state.temperature,
+            &diameter,
+            n2,
+            n3i,
+            D::one(),
+            0,
+            0,
+        ) * state.partial_density[c];
 
         let na = p.na[0];
         let nb = p.nb[0];
@@ -115,7 +125,11 @@ impl<D: DualNum<f64> + ScalarOperand> HelmholtzEnergyDual<D> for CrossAssociatio
             .mapv(|a| state.partial_density[p.component_index[a]]);
 
         helmholtz_energy_density_cross_association(
-            p,
+            &p.assoc_segment,
+            &p.sigma3_kappa_aibj,
+            &p.epsilon_k_aibj,
+            &p.na,
+            &p.nb,
             state.temperature,
             &rho_assoc,
             &diameter,
@@ -189,8 +203,13 @@ impl fmt::Display for CrossAssociation {
     }
 }
 
-pub fn helmholtz_energy_density_cross_association<S, D: DualNum<f64> + ScalarOperand, B>(
-    p: &GcPcSaftParameters<B>,
+pub fn helmholtz_energy_density_cross_association<S, D: DualNum<f64> + ScalarOperand>(
+    // p: &GcPcSaftParameters<B>,
+    assoc_segment: &Array1<usize>,
+    sigma3_kappa_aibj: &Array2<f64>,
+    epsilon_k_aibj: &Array2<f64>,
+    na: &Array1<f64>,
+    nb: &Array1<f64>,
     temperature: D,
     density: &ArrayBase<S, Ix1>,
     diameter: &Array1<D>,
@@ -213,11 +232,22 @@ where
     }
 
     // number of associating segments
-    let nassoc = p.assoc_segment.len();
+    let nassoc = assoc_segment.len();
 
     // association strength
     let delta = Array::from_shape_fn([nassoc; 2], |(i, j)| {
-        association_strength(p, temperature, diameter, n2, n3i, xi, i, j)
+        association_strength(
+            assoc_segment,
+            sigma3_kappa_aibj,
+            epsilon_k_aibj,
+            temperature,
+            diameter,
+            n2,
+            n3i,
+            xi,
+            i,
+            j,
+        )
     });
 
     // cross-association according to Michelsen2006
@@ -232,8 +262,8 @@ where
             &mut x,
             nassoc,
             &delta.map(D::re),
-            &p.na,
-            &p.nb,
+            na,
+            nb,
             &density.map(D::re),
             tol,
         )? {
@@ -247,7 +277,7 @@ where
     // calculate derivatives
     let mut x_dual = x.mapv(D::from);
     for _ in 0..D::NDERIV {
-        newton_step_cross_association(&mut x_dual, nassoc, &delta, &p.na, &p.nb, density, tol)?;
+        newton_step_cross_association(&mut x_dual, nassoc, &delta, na, nb, density, tol)?;
     }
 
     // save monomer fraction
@@ -259,7 +289,7 @@ where
     let xa = x_dual.slice(s![..nassoc]);
     let xb = x_dual.slice(s![nassoc..]);
     let f = |x: D| x.ln() - x * 0.5 + 0.5;
-    Ok((density * (xa.mapv(f) * &p.na + xb.mapv(f) * &p.nb)).sum())
+    Ok((density * (xa.mapv(f) * na + xb.mapv(f) * nb)).sum())
 }
 
 fn newton_step_cross_association<S, D: DualNum<f64> + ScalarOperand>(

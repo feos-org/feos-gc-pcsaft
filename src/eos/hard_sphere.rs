@@ -1,5 +1,4 @@
 use super::GcPcSaftEosParameters;
-use crate::parameter::GcPcSaftParameters;
 use feos_core::{HelmholtzEnergyDual, StateHD};
 use ndarray::*;
 use num_dual::DualNum;
@@ -7,7 +6,7 @@ use std::f64::consts::FRAC_PI_6;
 use std::fmt;
 use std::rc::Rc;
 
-impl<B> GcPcSaftParameters<B> {
+impl GcPcSaftEosParameters {
     pub fn hs_diameter<D: DualNum<f64>>(&self, temperature: D) -> Array1<D> {
         let ti = temperature.recip() * -3.0;
         Array::from_shape_fn(self.sigma.len(), |i| {

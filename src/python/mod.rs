@@ -7,6 +7,7 @@ use quantity::python::PyInit_quantity;
 
 mod dft;
 mod eos;
+mod micelles;
 mod parameter;
 use dft::*;
 use eos::*;

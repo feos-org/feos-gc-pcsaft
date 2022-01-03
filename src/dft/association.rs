@@ -168,7 +168,11 @@ where
                 .zip(xi.iter())
                 .map(|(((rho0, &n2), &n3i), &xi)| {
                     helmholtz_energy_density_cross_association(
-                        p,
+                        &p.assoc_segment,
+                        &p.sigma3_kappa_aibj,
+                        &p.epsilon_k_aibj,
+                        &p.na,
+                        &p.nb,
                         temperature,
                         &rho0,
                         &diameter,

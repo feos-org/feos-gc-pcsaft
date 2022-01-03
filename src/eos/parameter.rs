@@ -1,4 +1,4 @@
-use crate::parameter::{GcPcSaftParameters, GcPcSaftRecord};
+use crate::record::GcPcSaftRecord;
 use feos_core::joback::JobackRecord;
 use feos_core::parameter::{
     BinaryRecord, FromSegments, GroupContributionRecord, IdentifierOption, ParameterError,
@@ -11,35 +11,36 @@ use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
 
-pub type GcPcSaftEosParameters = GcPcSaftParameters<IndexMap<[usize; 2], f64>>;
+// pub type GcPcSaftEosParameters = GcPcSaftParameters<IndexMap<[usize; 2], f64>>;
 
-// pub struct GcPcSaftParameters {
-//     pub molarweight: Array1<f64>,
-//     pub component_index: Array1<usize>,
-//     identifiers: Array1<String>,
-//     pub m: Array1<f64>,
-//     pub sigma: Array1<f64>,
-//     pub epsilon_k: Array1<f64>,
-//     pub bonds: IndexMap<[usize; 2], f64>,
-//     // pub mu: Array1<f64>,
-//     // pub q: Array1<f64>,
-//     // pub mu2: Array1<f64>,
-//     // pub q2: Array1<f64>,
-//     pub assoc_segment: Array1<usize>,
-//     kappa_ab: Array1<f64>,
-//     epsilon_k_ab: Array1<f64>,
-//     pub na: Array1<f64>,
-//     pub nb: Array1<f64>,
-//     pub sigma_ij: Array2<f64>,
-//     pub epsilon_k_ij: Array2<f64>,
-//     pub sigma3_kappa_aibj: Array2<f64>,
-//     pub epsilon_k_aibj: Array2<f64>,
-//     // pub max_eta: f64,
-//     pub pure_records: Vec<GroupContributionRecord>,
-//     segment_records: Vec<SegmentRecord<GcPcSaftRecord, JobackRecord>>,
-//     binary_segment_records: Option<Vec<BinaryRecord<String, f64>>>,
-//     pub joback_records: Option<Vec<JobackRecord>>,
-// }
+pub struct GcPcSaftEosParameters {
+    pub molarweight: Array1<f64>,
+    pub component_index: Array1<usize>,
+    identifiers: Vec<String>,
+    pub m: Array1<f64>,
+    pub sigma: Array1<f64>,
+    pub epsilon_k: Array1<f64>,
+    pub bonds: IndexMap<[usize; 2], f64>,
+    // pub mu: Array1<f64>,
+    // pub q: Array1<f64>,
+    // pub mu2: Array1<f64>,
+    // pub q2: Array1<f64>,
+    pub assoc_segment: Array1<usize>,
+    kappa_ab: Array1<f64>,
+    epsilon_k_ab: Array1<f64>,
+    pub na: Array1<f64>,
+    pub nb: Array1<f64>,
+    pub k_ij: Array2<f64>,
+    pub sigma_ij: Array2<f64>,
+    pub epsilon_k_ij: Array2<f64>,
+    pub sigma3_kappa_aibj: Array2<f64>,
+    pub epsilon_k_aibj: Array2<f64>,
+    // pub max_eta: f64,
+    pub pure_records: Vec<GroupContributionRecord>,
+    segment_records: Vec<SegmentRecord<GcPcSaftRecord, JobackRecord>>,
+    binary_segment_records: Option<Vec<BinaryRecord<String, f64>>>,
+    pub joback_records: Option<Vec<JobackRecord>>,
+}
 
 impl GcPcSaftEosParameters {
     pub fn from_segments(
@@ -182,6 +183,7 @@ impl GcPcSaftEosParameters {
             epsilon_k_ab: Array1::from_vec(epsilon_k_ab),
             na: Array1::from_vec(na),
             nb: Array1::from_vec(nb),
+            k_ij,
             sigma_ij,
             epsilon_k_ij,
             sigma3_kappa_aibj,
@@ -362,7 +364,9 @@ pub mod test {
         SegmentRecord::new(
             "CH3".into(),
             15.0,
-            GcPcSaftRecord::new(0.77247, 3.6937, 181.49, None, None, None, None, None, None),
+            GcPcSaftRecord::new(
+                0.77247, 3.6937, 181.49, None, None, None, None, None, None, None,
+            ),
             None,
         )
     }
@@ -371,7 +375,9 @@ pub mod test {
         SegmentRecord::new(
             "CH2".into(),
             14.0,
-            GcPcSaftRecord::new(0.7912, 3.0207, 157.23, None, None, None, None, None, None),
+            GcPcSaftRecord::new(
+                0.7912, 3.0207, 157.23, None, None, None, None, None, None, None,
+            ),
             None,
         )
     }
@@ -388,6 +394,7 @@ pub mod test {
                 None,
                 Some(0.009583),
                 Some(2575.9),
+                None,
                 None,
                 None,
             ),

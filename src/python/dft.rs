@@ -1,5 +1,7 @@
 use super::parameter::*;
 use crate::dft::GcPcSaftFunctional;
+use crate::impl_micelle_profile;
+use crate::micelles::*;
 use feos_core::python::{PyContributions, PyVerbosity};
 use feos_core::utils::{
     DataSet, EquilibriumLiquidDensity, Estimator, LiquidDensity, VaporPressure,
@@ -57,6 +59,8 @@ impl_adsorption!(GcPcSaftFunctional, PyGcPcSaftFunctional);
 
 impl_solvation_profile!(GcPcSaftFunctional);
 
+impl_micelle_profile!(GcPcSaftFunctional);
+
 #[pymodule]
 pub fn gc_pcsaft_dft(py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_class::<PyGcPcSaftFunctional>()?;
@@ -76,6 +80,7 @@ pub fn gc_pcsaft_dft(py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_class::<PyDFTSolver>()?;
     m.add_class::<PySolvationProfile>()?;
     m.add_class::<PyFMTVersion>()?;
+    m.add_class::<PyMicelleProfile>()?;
 
     let utils = PyModule::new(py, "utils")?;
     utils.add_class::<PyDataSet>()?;

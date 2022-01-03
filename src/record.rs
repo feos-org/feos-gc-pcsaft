@@ -1,6 +1,3 @@
-use feos_core::joback::JobackRecord;
-use feos_core::parameter::{BinaryRecord, GroupContributionRecord, SegmentRecord};
-use ndarray::{Array1, Array2};
 use serde::{Deserialize, Serialize};
 
 /// gc-PC-SAFT parameter set.
@@ -32,6 +29,9 @@ pub struct GcPcSaftRecord {
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nb: Option<f64>,
+    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub psi_dft: Option<f64>,
 }
 
 impl GcPcSaftRecord {
@@ -45,6 +45,7 @@ impl GcPcSaftRecord {
         epsilon_k_ab: Option<f64>,
         na: Option<f64>,
         nb: Option<f64>,
+        psi_dft: Option<f64>,
     ) -> Self {
         Self {
             m,
@@ -56,6 +57,7 @@ impl GcPcSaftRecord {
             epsilon_k_ab,
             na,
             nb,
+            psi_dft,
         }
     }
 }
@@ -87,29 +89,30 @@ impl std::fmt::Display for GcPcSaftRecord {
     }
 }
 
-pub struct GcPcSaftParameters<B> {
-    pub molarweight: Array1<f64>,
-    pub component_index: Array1<usize>,
-    pub identifiers: Vec<String>,
-    pub m: Array1<f64>,
-    pub sigma: Array1<f64>,
-    pub epsilon_k: Array1<f64>,
-    pub bonds: B,
-    // pub mu: Array1<f64>,
-    // pub q: Array1<f64>,
-    // pub mu2: Array1<f64>,
-    // pub q2: Array1<f64>,
-    pub assoc_segment: Array1<usize>,
-    pub kappa_ab: Array1<f64>,
-    pub epsilon_k_ab: Array1<f64>,
-    pub na: Array1<f64>,
-    pub nb: Array1<f64>,
-    pub sigma_ij: Array2<f64>,
-    pub epsilon_k_ij: Array2<f64>,
-    pub sigma3_kappa_aibj: Array2<f64>,
-    pub epsilon_k_aibj: Array2<f64>,
-    pub pure_records: Vec<GroupContributionRecord>,
-    pub segment_records: Vec<SegmentRecord<GcPcSaftRecord, JobackRecord>>,
-    pub binary_segment_records: Option<Vec<BinaryRecord<String, f64>>>,
-    pub joback_records: Option<Vec<JobackRecord>>,
-}
+// pub struct GcPcSaftParameters<B> {
+//     pub molarweight: Array1<f64>,
+//     pub component_index: Array1<usize>,
+//     pub identifiers: Vec<String>,
+//     pub m: Array1<f64>,
+//     pub sigma: Array1<f64>,
+//     pub epsilon_k: Array1<f64>,
+//     pub bonds: B,
+//     // pub mu: Array1<f64>,
+//     // pub q: Array1<f64>,
+//     // pub mu2: Array1<f64>,
+//     // pub q2: Array1<f64>,
+//     pub assoc_segment: Array1<usize>,
+//     pub kappa_ab: Array1<f64>,
+//     pub epsilon_k_ab: Array1<f64>,
+//     pub na: Array1<f64>,
+//     pub nb: Array1<f64>,
+//     pub k_ij: Array2<f64>,
+//     pub sigma_ij: Array2<f64>,
+//     pub epsilon_k_ij: Array2<f64>,
+//     pub sigma3_kappa_aibj: Array2<f64>,
+//     pub epsilon_k_aibj: Array2<f64>,
+//     pub pure_records: Vec<GroupContributionRecord>,
+//     pub segment_records: Vec<SegmentRecord<GcPcSaftRecord, JobackRecord>>,
+//     pub binary_segment_records: Option<Vec<BinaryRecord<String, f64>>>,
+//     pub joback_records: Option<Vec<JobackRecord>>,
+// }

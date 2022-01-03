@@ -3,10 +3,11 @@
 
 mod dft;
 mod eos;
-mod parameter;
+pub mod micelles;
+mod record;
 pub use dft::{GcPcSaftFunctional, GcPcSaftFunctionalParameters};
 pub use eos::{GcPcSaft, GcPcSaftEosParameters, GcPcSaftOptions};
-pub use parameter::GcPcSaftRecord;
+pub use record::GcPcSaftRecord;
 
 #[cfg(feature = "python")]
 pub mod python;

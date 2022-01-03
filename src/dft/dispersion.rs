@@ -10,9 +10,6 @@ use std::f64::consts::{FRAC_PI_6, PI};
 use std::fmt;
 use std::rc::Rc;
 
-/// psi Parameter for heterosegmented DFT (Mairhofer2018)
-const PSI_GC_DFT: f64 = 1.5357;
-
 #[derive(Clone)]
 pub struct AttractiveFunctional {
     parameters: Rc<GcPcSaftFunctionalParameters>,
@@ -32,7 +29,7 @@ impl<N: DualNum<f64> + ScalarOperand> FunctionalContributionDual<N> for Attracti
 
         let d = p.hs_diameter(temperature);
         WeightFunctionInfo::new(p.component_index.clone(), false).add(
-            WeightFunction::new_scaled(d * PSI_GC_DFT, WeightFunctionShape::Theta),
+            WeightFunction::new_scaled(d * &p.psi_dft, WeightFunctionShape::Theta),
             false,
         )
     }

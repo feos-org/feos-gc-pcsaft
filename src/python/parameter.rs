@@ -1,6 +1,6 @@
 use crate::dft::GcPcSaftFunctionalParameters;
 use crate::eos::GcPcSaftEosParameters;
-use crate::parameter::GcPcSaftRecord;
+use crate::record::GcPcSaftRecord;
 use feos_core::joback::JobackRecord;
 use feos_core::parameter::{
     BinaryRecord, IdentifierOption, NoRecord, ParameterError, PureRecord, SegmentRecord,
@@ -12,6 +12,7 @@ use feos_core::python::parameter::{
 use feos_core::{
     impl_json_handling, impl_parameter_from_segments, impl_pure_record, impl_segment_record,
 };
+use numpy::{PyArray2, ToPyArray};
 use pyo3::prelude::*;
 use std::convert::TryFrom;
 use std::rc::Rc;
@@ -36,6 +37,7 @@ impl PyGcPcSaftRecord {
         epsilon_k_ab: Option<f64>,
         na: Option<f64>,
         nb: Option<f64>,
+        psi_dft: Option<f64>,
     ) -> Self {
         Self(GcPcSaftRecord::new(
             m,
@@ -47,6 +49,7 @@ impl PyGcPcSaftRecord {
             epsilon_k_ab,
             na,
             nb,
+            psi_dft,
         ))
     }
 }
@@ -104,6 +107,26 @@ impl_parameter_from_segments!(GcPcSaftFunctionalParameters, PyGcPcSaftFunctional
 impl PyGcPcSaftFunctionalParameters {
     fn _repr_markdown_(&self) -> String {
         self.0.to_markdown()
+    }
+
+    #[getter]
+    fn get_graph(&self, py: Python) -> PyResult<PyObject> {
+        let fun: Py<PyAny> = PyModule::from_code(
+            py,
+            "def f(s): 
+                import graphviz
+                return graphviz.Source(s.replace('\\\\\"', ''))",
+            "",
+            "",
+        )?
+        .getattr("f")?
+        .into();
+        fun.call1(py, (self.0.graph(),))
+    }
+
+    #[getter]
+    fn get_k_ij<'py>(&self, py: Python<'py>) -> &'py PyArray2<f64> {
+        self.0.k_ij.view().to_pyarray(py)
     }
 }
 

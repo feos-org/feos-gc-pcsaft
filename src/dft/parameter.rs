@@ -1,40 +1,44 @@
-use crate::parameter::{GcPcSaftParameters, GcPcSaftRecord};
+use crate::record::GcPcSaftRecord;
 use feos_core::joback::JobackRecord;
 use feos_core::parameter::{
     BinaryRecord, GroupContributionRecord, IdentifierOption, ParameterError, SegmentRecord,
 };
 use indexmap::{IndexMap, IndexSet};
 use ndarray::{Array1, Array2};
+use num_dual::DualNum;
+use petgraph::dot::{Config, Dot};
 use petgraph::graph::{Graph, UnGraph};
 use std::fmt::Write;
 use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
 
-pub type GcPcSaftFunctionalParameters = GcPcSaftParameters<UnGraph<(), ()>>;
+/// psi Parameter for heterosegmented DFT (Mairhofer2018)
+const PSI_GC_DFT: f64 = 1.5357;
 
-// pub struct GcPcSaftFunctionalParameters {
-//     pub molarweight: Array1<f64>,
-//     pub component_index: Array1<usize>,
-//     identifiers: Vec<String>,
-//     pub m: Array1<f64>,
-//     pub sigma: Array1<f64>,
-//     pub epsilon_k: Array1<f64>,
-//     pub bonds: UnGraph<(), ()>,
-//     pub assoc_segment: Array1<usize>,
-//     kappa_ab: Array1<f64>,
-//     epsilon_k_ab: Array1<f64>,
-//     pub na: Array1<f64>,
-//     pub nb: Array1<f64>,
-//     pub sigma_ij: Array2<f64>,
-//     pub epsilon_k_ij: Array2<f64>,
-//     pub sigma3_kappa_aibj: Array2<f64>,
-//     pub epsilon_k_aibj: Array2<f64>,
-//     pub pure_records: Vec<GroupContributionRecord>,
-//     segment_records: Vec<SegmentRecord<GcPcSaftRecord, JobackRecord>>,
-//     binary_segment_records: Option<Vec<BinaryRecord<String, f64>>>,
-//     // pub joback_records: Option<Vec<JobackRecord>>,
-// }
+pub struct GcPcSaftFunctionalParameters {
+    pub molarweight: Array1<f64>,
+    pub component_index: Array1<usize>,
+    identifiers: Vec<String>,
+    pub m: Array1<f64>,
+    pub sigma: Array1<f64>,
+    pub epsilon_k: Array1<f64>,
+    pub bonds: UnGraph<(), ()>,
+    pub assoc_segment: Array1<usize>,
+    kappa_ab: Array1<f64>,
+    epsilon_k_ab: Array1<f64>,
+    pub na: Array1<f64>,
+    pub nb: Array1<f64>,
+    pub psi_dft: Array1<f64>,
+    pub k_ij: Array2<f64>,
+    pub sigma_ij: Array2<f64>,
+    pub epsilon_k_ij: Array2<f64>,
+    pub sigma3_kappa_aibj: Array2<f64>,
+    pub epsilon_k_aibj: Array2<f64>,
+    pure_records: Vec<GroupContributionRecord>,
+    segment_records: Vec<SegmentRecord<GcPcSaftRecord, JobackRecord>>,
+    binary_segment_records: Option<Vec<BinaryRecord<String, f64>>>,
+}
 
 impl GcPcSaftFunctionalParameters {
     pub fn from_segments(
@@ -59,8 +63,7 @@ impl GcPcSaftFunctionalParameters {
         let mut epsilon_k_ab = Vec::new();
         let mut na = Vec::new();
         let mut nb = Vec::new();
-
-        // let mut joback_records = Vec::new();
+        let mut psi_dft = Vec::new();
 
         let mut segment_index = 0;
         for (i, record) in pure_records.iter().enumerate() {
@@ -99,21 +102,10 @@ impl GcPcSaftFunctionalParameters {
                     nb.push(segment.model_record.nb.unwrap_or(1.0));
                 }
 
+                psi_dft.push(segment.model_record.psi_dft.unwrap_or(PSI_GC_DFT));
+
                 segment_index += 1;
             }
-
-            // let segment_count = chemical_record.segment_count(&segment_records)?;
-            // let ideal_gas_segments: Option<Vec<_>> = segment_count
-            //     .iter()
-            //     .map(|(s, &n)| s.ideal_gas_record.clone().map(|ig| (ig, n)))
-            //     .collect();
-
-            // joback_records.push(
-            //     ideal_gas_segments
-            //         .as_ref()
-            //         .map(|s| JobackRecord::from_segments(s, None))
-            //         .transpose()?,
-            // );
         }
 
         // Binary interaction parameter
@@ -170,6 +162,8 @@ impl GcPcSaftFunctionalParameters {
             epsilon_k_ab: Array1::from_vec(epsilon_k_ab),
             na: Array1::from_vec(na),
             nb: Array1::from_vec(nb),
+            psi_dft: Array1::from_vec(psi_dft),
+            k_ij,
             sigma_ij,
             epsilon_k_ij,
             sigma3_kappa_aibj,
@@ -177,7 +171,6 @@ impl GcPcSaftFunctionalParameters {
             pure_records,
             segment_records,
             binary_segment_records,
-            joback_records: None,
         })
     }
 
@@ -254,6 +247,13 @@ impl GcPcSaftFunctionalParameters {
         .unwrap()
     }
 
+    pub fn hs_diameter<D: DualNum<f64>>(&self, temperature: D) -> Array1<D> {
+        let ti = temperature.recip() * -3.0;
+        Array1::from_shape_fn(self.sigma.len(), |i| {
+            -((ti * self.epsilon_k[i]).exp() * 0.12 - 1.0) * self.sigma[i]
+        })
+    }
+
     pub fn to_markdown(&self) -> String {
         let mut output = String::new();
         let o = &mut output;
@@ -293,31 +293,15 @@ impl GcPcSaftFunctionalParameters {
             )
             .unwrap();
         }
-        // write!(o, "\n\n|component|segment 1|segment 2|bonds|\n|-|-|-|-|").unwrap();
-
-        // let mut last_component = None;
-        // for ([c1, c2], &c) in &self.bonds {
-        //     let pure = &self.pure_records[self.component_index[*c1]].identifier;
-        //     let component = if let Some(last) = last_component {
-        //         if last == pure {
-        //             ""
-        //         } else {
-        //             last_component = Some(pure);
-        //             pure.name.as_ref().unwrap_or(&pure.cas)
-        //         }
-        //     } else {
-        //         last_component = Some(pure);
-        //         pure.name.as_ref().unwrap_or(&pure.cas)
-        //     };
-        //     write!(
-        //         o,
-        //         "\n|{}|{}|{}|{}|",
-        //         component, self.identifiers[*c1], self.identifiers[*c2], c
-        //     )
-        //     .unwrap();
-        // }
 
         output
+    }
+
+    pub fn graph(&self) -> String {
+        let graph = self
+            .bonds
+            .map(|i, _| &self.identifiers[i.index()], |_, _| ());
+        format!("{:?}", Dot::with_config(&graph, &[Config::EdgeNoLabel]))
     }
 }
 
