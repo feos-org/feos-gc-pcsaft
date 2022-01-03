@@ -3,9 +3,10 @@
 
 mod dft;
 mod eos;
-mod parameters;
-pub use eos::{GcPcSaft, GcPcSaftOptions};
-pub use parameters::{GcPcSaftParameters, GcPcSaftRecord};
+mod parameter;
+pub use dft::{GcPcSaftFunctional, GcPcSaftFunctionalParameters};
+pub use eos::{GcPcSaft, GcPcSaftEosParameters, GcPcSaftOptions};
+pub use parameter::GcPcSaftRecord;
 
 #[cfg(feature = "python")]
 pub mod python;

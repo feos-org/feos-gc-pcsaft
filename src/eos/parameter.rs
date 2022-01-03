@@ -1,130 +1,47 @@
+use crate::parameter::{GcPcSaftParameters, GcPcSaftRecord};
 use feos_core::joback::JobackRecord;
 use feos_core::parameter::{
     BinaryRecord, FromSegments, GroupContributionRecord, IdentifierOption, ParameterError,
     SegmentRecord,
 };
 use indexmap::{IndexMap, IndexSet};
-use ndarray::{Array, Array1, Array2};
-use serde::{Deserialize, Serialize};
+use ndarray::{Array1, Array2};
 use std::fmt::Write;
 use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
 
-/// PcSaft parameter set.
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GcPcSaftRecord {
-    /// Segment shape factor
-    pub m: f64,
-    /// Segment diameter in units of Angstrom
-    pub sigma: f64,
-    /// Energetic parameter in units of Kelvin
-    pub epsilon_k: f64,
-    /// Dipole moment in units of Debye
-    #[serde(default)]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub mu: Option<f64>,
-    /// Quadrupole moment in units of Debye * Angstrom
-    #[serde(default)]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub q: Option<f64>,
-    #[serde(default)]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub kappa_ab: Option<f64>,
-    #[serde(default)]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub epsilon_k_ab: Option<f64>,
-    #[serde(default)]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub na: Option<f64>,
-    #[serde(default)]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub nb: Option<f64>,
-}
+pub type GcPcSaftEosParameters = GcPcSaftParameters<IndexMap<[usize; 2], f64>>;
 
-impl GcPcSaftRecord {
-    pub fn new(
-        m: f64,
-        sigma: f64,
-        epsilon_k: f64,
-        mu: Option<f64>,
-        q: Option<f64>,
-        kappa_ab: Option<f64>,
-        epsilon_k_ab: Option<f64>,
-        na: Option<f64>,
-        nb: Option<f64>,
-    ) -> Self {
-        Self {
-            m,
-            sigma,
-            epsilon_k,
-            mu,
-            q,
-            kappa_ab,
-            epsilon_k_ab,
-            na,
-            nb,
-        }
-    }
-}
+// pub struct GcPcSaftParameters {
+//     pub molarweight: Array1<f64>,
+//     pub component_index: Array1<usize>,
+//     identifiers: Array1<String>,
+//     pub m: Array1<f64>,
+//     pub sigma: Array1<f64>,
+//     pub epsilon_k: Array1<f64>,
+//     pub bonds: IndexMap<[usize; 2], f64>,
+//     // pub mu: Array1<f64>,
+//     // pub q: Array1<f64>,
+//     // pub mu2: Array1<f64>,
+//     // pub q2: Array1<f64>,
+//     pub assoc_segment: Array1<usize>,
+//     kappa_ab: Array1<f64>,
+//     epsilon_k_ab: Array1<f64>,
+//     pub na: Array1<f64>,
+//     pub nb: Array1<f64>,
+//     pub sigma_ij: Array2<f64>,
+//     pub epsilon_k_ij: Array2<f64>,
+//     pub sigma3_kappa_aibj: Array2<f64>,
+//     pub epsilon_k_aibj: Array2<f64>,
+//     // pub max_eta: f64,
+//     pub pure_records: Vec<GroupContributionRecord>,
+//     segment_records: Vec<SegmentRecord<GcPcSaftRecord, JobackRecord>>,
+//     binary_segment_records: Option<Vec<BinaryRecord<String, f64>>>,
+//     pub joback_records: Option<Vec<JobackRecord>>,
+// }
 
-impl std::fmt::Display for GcPcSaftRecord {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, ", m={}", self.m)?;
-        write!(f, ", sigma={}", self.sigma)?;
-        write!(f, ", epsilon_k={}", self.epsilon_k)?;
-        if let Some(n) = &self.mu {
-            write!(f, ", mu={}", n)?;
-        }
-        if let Some(n) = &self.q {
-            write!(f, ", q={}", n)?;
-        }
-        if let Some(n) = &self.kappa_ab {
-            write!(f, ", kappa_ab={}", n)?;
-        }
-        if let Some(n) = &self.epsilon_k_ab {
-            write!(f, ", epsilon_k_ab={}", n)?;
-        }
-        if let Some(n) = &self.na {
-            write!(f, ", na={}", n)?;
-        }
-        if let Some(n) = &self.nb {
-            write!(f, ", nb={}", n)?;
-        }
-        Ok(())
-    }
-}
-
-#[derive(Clone)]
-pub struct GcPcSaftParameters {
-    pub molarweight: Array1<f64>,
-    pub component_index: Array1<usize>,
-    identifiers: Array1<String>,
-    pub m: Array1<f64>,
-    pub sigma: Array1<f64>,
-    pub epsilon_k: Array1<f64>,
-    pub bonds: IndexMap<[usize; 2], f64>,
-    // pub mu: Array1<f64>,
-    // pub q: Array1<f64>,
-    // pub mu2: Array1<f64>,
-    // pub q2: Array1<f64>,
-    pub assoc_segment: Array1<usize>,
-    kappa_ab: Array1<f64>,
-    epsilon_k_ab: Array1<f64>,
-    pub na: Array1<f64>,
-    pub nb: Array1<f64>,
-    pub sigma_ij: Array2<f64>,
-    pub epsilon_k_ij: Array2<f64>,
-    pub sigma3_kappa_aibj: Array2<f64>,
-    pub epsilon_k_aibj: Array2<f64>,
-    // pub max_eta: f64,
-    pub pure_records: Vec<GroupContributionRecord>,
-    segment_records: Vec<SegmentRecord<GcPcSaftRecord, JobackRecord>>,
-    binary_segment_records: Option<Vec<BinaryRecord<String, f64>>>,
-    pub joback_records: Option<Vec<JobackRecord>>,
-}
-
-impl GcPcSaftParameters {
+impl GcPcSaftEosParameters {
     pub fn from_segments(
         pure_records: Vec<GroupContributionRecord>,
         segment_records: Vec<SegmentRecord<GcPcSaftRecord, JobackRecord>>,
@@ -135,7 +52,7 @@ impl GcPcSaftParameters {
             .map(|r| (r.identifier.clone(), r.clone()))
             .collect();
 
-        let mut molarweight = Array::zeros(pure_records.len());
+        let mut molarweight = Array1::zeros(pure_records.len());
         let mut component_index = Vec::new();
         let mut identifiers = Vec::new();
         let mut m = Vec::new();
@@ -207,8 +124,7 @@ impl GcPcSaftParameters {
             joback_records.push(
                 ideal_gas_segments
                     .as_ref()
-                    .map(|s| JobackRecord::from_segments(s, None))
-                    .transpose()?,
+                    .map(|s| JobackRecord::from_segments(s)),
             );
         }
 
@@ -255,17 +171,17 @@ impl GcPcSaftParameters {
 
         Ok(Self {
             molarweight,
-            component_index: Array::from_vec(component_index),
-            identifiers: Array::from_vec(identifiers),
-            m: Array::from_vec(m),
-            sigma: Array::from_vec(sigma),
-            epsilon_k: Array::from_vec(epsilon_k),
+            component_index: Array1::from_vec(component_index),
+            identifiers,
+            m: Array1::from_vec(m),
+            sigma: Array1::from_vec(sigma),
+            epsilon_k: Array1::from_vec(epsilon_k),
             bonds,
-            assoc_segment: Array::from_vec(assoc_segment),
-            kappa_ab: Array::from_vec(kappa_ab),
-            epsilon_k_ab: Array::from_vec(epsilon_k_ab),
-            na: Array::from_vec(na),
-            nb: Array::from_vec(nb),
+            assoc_segment: Array1::from_vec(assoc_segment),
+            kappa_ab: Array1::from_vec(kappa_ab),
+            epsilon_k_ab: Array1::from_vec(epsilon_k_ab),
+            na: Array1::from_vec(na),
+            nb: Array1::from_vec(nb),
             sigma_ij,
             epsilon_k_ij,
             sigma3_kappa_aibj,
@@ -417,7 +333,7 @@ impl GcPcSaftParameters {
     }
 }
 
-impl std::fmt::Display for GcPcSaftParameters {
+impl std::fmt::Display for GcPcSaftEosParameters {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "GcPcSaftParameters(")?;
         write!(f, "\n\tmolarweight={}", self.molarweight)?;
@@ -483,7 +399,7 @@ pub mod test {
         BinaryRecord::new("CH3".to_string(), "OH".to_string(), -0.0087)
     }
 
-    pub fn propane() -> GcPcSaftParameters {
+    pub fn propane() -> GcPcSaftEosParameters {
         let pure = GroupContributionRecord::new(
             Identifier::new("74-98-6", Some("propane"), None, None, None, None),
             0.0,
@@ -494,10 +410,10 @@ pub mod test {
             None,
             None,
         );
-        GcPcSaftParameters::from_segments(vec![pure], vec![ch3(), ch2()], None).unwrap()
+        GcPcSaftEosParameters::from_segments(vec![pure], vec![ch3(), ch2()], None).unwrap()
     }
 
-    pub fn propanol() -> GcPcSaftParameters {
+    pub fn propanol() -> GcPcSaftEosParameters {
         let pure = GroupContributionRecord::new(
             Identifier::new("71-23-8", Some("1-propanol"), None, None, None, None),
             0.0,
@@ -508,10 +424,10 @@ pub mod test {
             None,
             None,
         );
-        GcPcSaftParameters::from_segments(vec![pure], vec![ch3(), ch2(), oh()], None).unwrap()
+        GcPcSaftEosParameters::from_segments(vec![pure], vec![ch3(), ch2(), oh()], None).unwrap()
     }
 
-    pub fn ethanol_propanol(binary: bool) -> GcPcSaftParameters {
+    pub fn ethanol_propanol(binary: bool) -> GcPcSaftEosParameters {
         let ethanol = GroupContributionRecord::new(
             Identifier::new("64-17-5", Some("ethanol"), None, None, None, None),
             0.0,
@@ -533,8 +449,12 @@ pub mod test {
             None,
         );
         let binary = if binary { Some(vec![ch3_oh()]) } else { None };
-        GcPcSaftParameters::from_segments(vec![ethanol, propanol], vec![ch3(), ch2(), oh()], binary)
-            .unwrap()
+        GcPcSaftEosParameters::from_segments(
+            vec![ethanol, propanol],
+            vec![ch3(), ch2(), oh()],
+            binary,
+        )
+        .unwrap()
     }
 
     #[test]

@@ -1,5 +1,5 @@
 use super::hard_sphere::zeta;
-use crate::parameters::GcPcSaftParameters;
+use super::GcPcSaftEosParameters;
 use feos_core::{HelmholtzEnergyDual, StateHD};
 use num_dual::DualNum;
 use std::f64::consts::PI;
@@ -63,7 +63,7 @@ pub const B2: [f64; 7] = [
 
 #[derive(Clone)]
 pub struct Dispersion {
-    pub parameters: Rc<GcPcSaftParameters>,
+    pub parameters: Rc<GcPcSaftEosParameters>,
 }
 
 impl<D: DualNum<f64>> HelmholtzEnergyDual<D> for Dispersion {
@@ -131,7 +131,7 @@ impl fmt::Display for Dispersion {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::parameters::test::*;
+    use crate::eos::parameter::test::*;
     use approx::assert_relative_eq;
     use feos_core::EosUnit;
     use ndarray::arr1;

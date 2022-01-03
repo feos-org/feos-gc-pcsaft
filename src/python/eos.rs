@@ -1,4 +1,4 @@
-use super::parameters::PyGcPcSaftParameters;
+use super::parameter::PyGcPcSaftEosParameters;
 use crate::eos::{GcPcSaft, GcPcSaftOptions};
 use feos_core::python::{PyContributions, PyVerbosity};
 use feos_core::EquationOfState;
@@ -26,7 +26,7 @@ impl PyGcPcSaft {
         tol_cross_assoc = "1e-10"
     )]
     fn new(
-        parameters: PyGcPcSaftParameters,
+        parameters: PyGcPcSaftEosParameters,
         max_eta: f64,
         max_iter_cross_assoc: usize,
         tol_cross_assoc: f64,
