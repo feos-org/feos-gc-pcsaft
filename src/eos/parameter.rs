@@ -440,12 +440,28 @@ pub mod test {
     #[test]
     fn test_kij() {
         let params = ethanol_propanol(true);
-        println!("{}", params.epsilon_k_ij);
+        let identifiers: Vec<_> = params.identifiers.iter().enumerate().collect();
+        let ch3 = identifiers.iter().find(|&&(_, id)| id == "CH3").unwrap();
+        let ch2 = identifiers
+            .iter()
+            .skip(3)
+            .find(|&&(_, id)| id == "CH2")
+            .unwrap();
+        let oh = identifiers
+            .iter()
+            .skip(3)
+            .find(|&&(_, id)| id == "OH")
+            .unwrap();
+        println!("{:?}", params.identifiers);
+        println!("{}", params.k_ij);
         // CH3 - CH2
-        assert_eq!(params.epsilon_k_ij[(0, 4)], (181.49f64 * 157.23).sqrt());
+        assert_eq!(
+            params.epsilon_k_ij[(ch3.0, ch2.0)],
+            (181.49f64 * 157.23).sqrt()
+        );
         // CH3 - OH
         assert_eq!(
-            params.epsilon_k_ij[(0, 5)],
+            params.epsilon_k_ij[(ch3.0, oh.0)],
             (181.49f64 * 334.29).sqrt() * 1.0087
         );
     }

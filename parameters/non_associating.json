@@ -8,13 +8,10 @@
             "inchi": "InChI=1/C2H6/c1-2/h1-2H3",
             "formula": "C2H6"
         },
-        "molarweight": 30.07,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -25,14 +22,11 @@
             "inchi": "InChI=1/C3H8/c1-3-2/h3H2,1-2H3",
             "formula": "C3H8"
         },
-        "molarweight": 44.096,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -43,15 +37,12 @@
             "inchi": "InChI=1/C4H10/c1-3-4-2/h3-4H2,1-2H3",
             "formula": "C4H10"
         },
-        "molarweight": 58.123,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -62,16 +53,13 @@
             "inchi": "InChI=1/C5H12/c1-3-5-4-2/h3-5H2,1-2H3",
             "formula": "C5H12"
         },
-        "molarweight": 72.146,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -82,17 +70,14 @@
             "inchi": "InChI=1/C6H14/c1-3-5-6-4-2/h3-6H2,1-2H3",
             "formula": "C6H14"
         },
-        "molarweight": 86.177,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -103,18 +88,15 @@
             "inchi": "InChI=1/C7H16/c1-3-5-7-6-4-2/h3-7H2,1-2H3",
             "formula": "C7H16"
         },
-        "molarweight": 100.203,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -125,19 +107,16 @@
             "inchi": "InChI=1/C8H18/c1-3-5-7-8-6-4-2/h3-8H2,1-2H3",
             "formula": "C8H18"
         },
-        "molarweight": 114.231,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -148,20 +127,17 @@
             "inchi": "InChI=1/C9H20/c1-3-5-7-9-8-6-4-2/h3-9H2,1-2H3",
             "formula": "C9H20"
         },
-        "molarweight": 128.25,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -172,21 +148,18 @@
             "inchi": "InChI=1/C10H22/c1-3-5-7-9-10-8-6-4-2/h3-10H2,1-2H3",
             "formula": "C10H22"
         },
-        "molarweight": 142.285,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -197,22 +170,19 @@
             "inchi": "InChI=1/C11H24/c1-3-5-7-9-11-10-8-6-4-2/h3-11H2,1-2H3",
             "formula": "C11H24"
         },
-        "molarweight": 156.312,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -223,23 +193,20 @@
             "inchi": "InChI=1/C12H26/c1-3-5-7-9-11-12-10-8-6-4-2/h3-12H2,1-2H3",
             "formula": "C12H26"
         },
-        "molarweight": 170.338,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -250,24 +217,21 @@
             "inchi": "InChI=1/C13H28/c1-3-5-7-9-11-13-12-10-8-6-4-2/h3-13H2,1-2H3",
             "formula": "C13H28"
         },
-        "molarweight": 184.365,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -278,25 +242,22 @@
             "inchi": "InChI=1/C14H30/c1-3-5-7-9-11-13-14-12-10-8-6-4-2/h3-14H2,1-2H3",
             "formula": "C14H30"
         },
-        "molarweight": 198.392,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -307,26 +268,23 @@
             "inchi": "InChI=1/C15H32/c1-3-5-7-9-11-13-15-14-12-10-8-6-4-2/h3-15H2,1-2H3",
             "formula": "C15H32"
         },
-        "molarweight": 212.419,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -337,27 +295,24 @@
             "inchi": "InChI=1/C16H34/c1-3-5-7-9-11-13-15-16-14-12-10-8-6-4-2/h3-16H2,1-2H3",
             "formula": "C16H34"
         },
-        "molarweight": 226.446,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -368,28 +323,25 @@
             "inchi": "InChI=1/C17H36/c1-3-5-7-9-11-13-15-17-16-14-12-10-8-6-4-2/h3-17H2,1-2H3",
             "formula": "C17H36"
         },
-        "molarweight": 240.473,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -400,29 +352,26 @@
             "inchi": "InChI=1/C18H38/c1-3-5-7-9-11-13-15-17-18-16-14-12-10-8-6-4-2/h3-18H2,1-2H3",
             "formula": "C18H38"
         },
-        "molarweight": 254.5,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -433,30 +382,27 @@
             "inchi": "InChI=1/C19H40/c1-3-5-7-9-11-13-15-17-19-18-16-14-12-10-8-6-4-2/h3-19H2,1-2H3",
             "formula": "C19H40"
         },
-        "molarweight": 268.527,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -467,31 +413,28 @@
             "inchi": "InChI=1/C20H42/c1-3-5-7-9-11-13-15-17-19-20-18-16-14-12-10-8-6-4-2/h3-20H2,1-2H3",
             "formula": "C20H42"
         },
-        "molarweight": 282.553,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -502,29 +445,26 @@
             "inchi": "InChI=1/C4H10/c1-4(2)3/h4H,1-3H3",
             "formula": "C4H10"
         },
-        "molarweight": 58.123,
-        "chemical_record": {
-            "segments": [
-                ">CH",
-                "CH3",
-                "CH3",
-                "CH3"
+        "segments": [
+            ">CH",
+            "CH3",
+            "CH3",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    0,
-                    2
-                ],
-                [
-                    0,
-                    3
-                ]
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -535,34 +475,31 @@
             "inchi": "InChI=1/C5H12/c1-4-5(2)3/h5H,4H2,1-3H3",
             "formula": "C5H12"
         },
-        "molarweight": 72.15,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                ">CH",
-                "CH2",
-                "CH3",
-                "CH3"
+        "segments": [
+            "CH3",
+            ">CH",
+            "CH2",
+            "CH3",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    1,
-                    4
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                1,
+                4
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -573,34 +510,31 @@
             "inchi": "InChI=1/C5H12/c1-5(2,3)4/h1-4H3",
             "formula": "C5H12"
         },
-        "molarweight": 72.15,
-        "chemical_record": {
-            "segments": [
-                ">C<",
-                "CH3",
-                "CH3",
-                "CH3",
-                "CH3"
+        "segments": [
+            ">C<",
+            "CH3",
+            "CH3",
+            "CH3",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    0,
-                    2
-                ],
-                [
-                    0,
-                    3
-                ],
-                [
-                    0,
-                    4
-                ]
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -611,39 +545,36 @@
             "inchi": "InChI=1/C6H14/c1-4-5-6(2)3/h6H,4-5H2,1-3H3",
             "formula": "C6H14"
         },
-        "molarweight": 86.177,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                ">CH",
-                "CH2",
-                "CH2",
-                "CH3",
-                "CH3"
+        "segments": [
+            "CH3",
+            ">CH",
+            "CH2",
+            "CH2",
+            "CH3",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    1,
-                    5
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                1,
+                5
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -654,39 +585,36 @@
             "inchi": "InChI=1/C6H14/c1-5-6(2,3)4/h5H2,1-4H3",
             "formula": "C6H14"
         },
-        "molarweight": 86.177,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                ">C<",
-                "CH2",
-                "CH3",
-                "CH3",
-                "CH3"
+        "segments": [
+            "CH3",
+            ">C<",
+            "CH2",
+            "CH3",
+            "CH3",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    1,
-                    4
-                ],
-                [
-                    1,
-                    5
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                1,
+                5
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -697,39 +625,36 @@
             "inchi": "InChI=1/C6H14/c1-5(2)6(3)4/h5-6H,1-4H3",
             "formula": "C6H14"
         },
-        "molarweight": 86.177,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                ">CH",
-                ">CH",
-                "CH3",
-                "CH3",
-                "CH3"
+        "segments": [
+            "CH3",
+            ">CH",
+            ">CH",
+            "CH3",
+            "CH3",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    1,
-                    4
-                ],
-                [
-                    2,
-                    5
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                2,
+                5
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -740,39 +665,36 @@
             "inchi": "InChI=1/C6H14/c1-4-6(3)5-2/h6H,4-5H2,1-3H3",
             "formula": "C6H14"
         },
-        "molarweight": 86.177,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                ">CH",
-                "CH2",
-                "CH3",
-                "CH3"
+        "segments": [
+            "CH3",
+            "CH2",
+            ">CH",
+            "CH2",
+            "CH3",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    2,
-                    5
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                2,
+                5
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -783,44 +705,41 @@
             "inchi": "InChI=1/C7H16/c1-4-5-6-7(2)3/h7H,4-6H2,1-3H3",
             "formula": "C7H16"
         },
-        "molarweight": 100.204,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                ">CH",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3",
-                "CH3"
+        "segments": [
+            "CH3",
+            ">CH",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    1,
-                    6
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                1,
+                6
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -831,38 +750,35 @@
             "inchi": "InChI=1/C5H10/c1-2-4-5-3-1/h1-5H2",
             "formula": "C5H10"
         },
-        "molarweight": 70.13,
-        "chemical_record": {
-            "segments": [
-                "CH2_pent",
-                "CH2_pent",
-                "CH2_pent",
-                "CH2_pent",
-                "CH2_pent"
+        "segments": [
+            "CH2_pent",
+            "CH2_pent",
+            "CH2_pent",
+            "CH2_pent",
+            "CH2_pent"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    0
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                0
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -873,43 +789,40 @@
             "inchi": "InChI=1/C6H12/c1-2-4-6-5-3-1/h1-6H2",
             "formula": "C6H12"
         },
-        "molarweight": 84.147,
-        "chemical_record": {
-            "segments": [
-                "CH2_hex",
-                "CH2_hex",
-                "CH2_hex",
-                "CH2_hex",
-                "CH2_hex",
-                "CH2_hex"
+        "segments": [
+            "CH2_hex",
+            "CH2_hex",
+            "CH2_hex",
+            "CH2_hex",
+            "CH2_hex",
+            "CH2_hex"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    5,
-                    0
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                5,
+                0
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -920,43 +833,40 @@
             "inchi": "InChI=1/C6H12/c1-6-4-2-3-5-6/h6H,2-5H2,1H3",
             "formula": "C6H12"
         },
-        "molarweight": 84.156,
-        "chemical_record": {
-            "segments": [
-                "CH2_pent",
-                "CH2_pent",
-                "CH2_pent",
-                "CH2_pent",
-                "CH_pent",
-                "CH3"
+        "segments": [
+            "CH2_pent",
+            "CH2_pent",
+            "CH2_pent",
+            "CH2_pent",
+            "CH_pent",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    0
-                ],
-                [
-                    4,
-                    5
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                5
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -967,48 +877,45 @@
             "inchi": "InChI=1/C7H14/c1-7-5-3-2-4-6-7/h7H,2-6H2,1H3",
             "formula": "C7H14"
         },
-        "molarweight": 98.182,
-        "chemical_record": {
-            "segments": [
-                "CH2_hex",
-                "CH2_hex",
-                "CH2_hex",
-                "CH2_hex",
-                "CH2_hex",
-                "CH_hex",
-                "CH3"
+        "segments": [
+            "CH2_hex",
+            "CH2_hex",
+            "CH2_hex",
+            "CH2_hex",
+            "CH2_hex",
+            "CH_hex",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    5,
-                    0
-                ],
-                [
-                    5,
-                    6
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                5,
+                0
+            ],
+            [
+                5,
+                6
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -1019,48 +926,45 @@
             "inchi": "InChI=1/C7H14/c1-2-7-5-3-4-6-7/h7H,2-6H2,1H3",
             "formula": "C7H14"
         },
-        "molarweight": 98.182,
-        "chemical_record": {
-            "segments": [
-                "CH2_pent",
-                "CH2_pent",
-                "CH2_pent",
-                "CH2_pent",
-                "CH_pent",
-                "CH2",
-                "CH3"
+        "segments": [
+            "CH2_pent",
+            "CH2_pent",
+            "CH2_pent",
+            "CH2_pent",
+            "CH_pent",
+            "CH2",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    0
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    5,
-                    6
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                5,
+                6
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -1071,53 +975,50 @@
             "inchi": "InChI=1/C8H16/c1-2-8-6-4-3-5-7-8/h8H,2-7H2,1H3",
             "formula": "C8H16"
         },
-        "molarweight": 112.215,
-        "chemical_record": {
-            "segments": [
-                "CH2_hex",
-                "CH2_hex",
-                "CH2_hex",
-                "CH2_hex",
-                "CH2_hex",
-                "CH_hex",
-                "CH2",
-                "CH3"
+        "segments": [
+            "CH2_hex",
+            "CH2_hex",
+            "CH2_hex",
+            "CH2_hex",
+            "CH2_hex",
+            "CH_hex",
+            "CH2",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    5,
-                    0
-                ],
-                [
-                    5,
-                    6
-                ],
-                [
-                    6,
-                    7
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                5,
+                0
+            ],
+            [
+                5,
+                6
+            ],
+            [
+                6,
+                7
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -1128,13 +1029,10 @@
             "inchi": "InChI=1/C2H4/c1-2/h1-2H2",
             "formula": "C2H4"
         },
-        "molarweight": 28.05,
-        "chemical_record": {
-            "segments": [
-                "=CH2",
-                "=CH2"
-            ]
-        }
+        "segments": [
+            "=CH2",
+            "=CH2"
+        ]
     },
     {
         "identifier": {
@@ -1145,14 +1043,11 @@
             "inchi": "InChI=1/C3H6/c1-3-2/h3H,1H2,2H3",
             "formula": "C3H6"
         },
-        "molarweight": 42.081,
-        "chemical_record": {
-            "segments": [
-                "=CH2",
-                "=CH",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "=CH2",
+            "=CH",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -1163,15 +1058,12 @@
             "inchi": "InChI=1/C4H8/c1-3-4-2/h3H,1,4H2,2H3",
             "formula": "C4H8"
         },
-        "molarweight": 56.107,
-        "chemical_record": {
-            "segments": [
-                "=CH2",
-                "=CH",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "=CH2",
+            "=CH",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -1182,16 +1074,13 @@
             "inchi": "InChI=1/C5H10/c1-3-5-4-2/h3H,1,4-5H2,2H3",
             "formula": "C5H10"
         },
-        "molarweight": 70.134,
-        "chemical_record": {
-            "segments": [
-                "=CH2",
-                "=CH",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "=CH2",
+            "=CH",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -1202,17 +1091,14 @@
             "inchi": "InChI=1/C6H12/c1-3-5-6-4-2/h3H,1,4-6H2,2H3",
             "formula": "C6H12"
         },
-        "molarweight": 84.16,
-        "chemical_record": {
-            "segments": [
-                "=CH2",
-                "=CH",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "=CH2",
+            "=CH",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -1223,19 +1109,16 @@
             "inchi": "InChI=1/C8H16/c1-3-5-7-8-6-4-2/h3H,1,4-8H2,2H3",
             "formula": "C8H16"
         },
-        "molarweight": 112.215,
-        "chemical_record": {
-            "segments": [
-                "=CH2",
-                "=CH",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "=CH2",
+            "=CH",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -1246,38 +1129,35 @@
             "inchi": "InChI=1/C5H8/c1-2-4-5-3-1/h1-2H,3-5H2",
             "formula": "C5H8"
         },
-        "molarweight": 68.114,
-        "chemical_record": {
-            "segments": [
-                "CH2_pent",
-                "CH2_pent",
-                "CH2_pent",
-                "CH_pent",
-                "CH_pent"
+        "segments": [
+            "CH2_pent",
+            "CH2_pent",
+            "CH2_pent",
+            "CH_pent",
+            "CH_pent"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    0
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                0
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -1288,43 +1168,40 @@
             "inchi": "InChI=1/C6H6/c1-2-4-6-5-3-1/h1-6H",
             "formula": "C6H6"
         },
-        "molarweight": 78.114,
-        "chemical_record": {
-            "segments": [
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom"
+        "segments": [
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    5,
-                    0
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                5,
+                0
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -1335,48 +1212,45 @@
             "inchi": "InChI=1/C7H8/c1-7-5-3-2-4-6-7/h2-6H,1H3",
             "formula": "C7H8"
         },
-        "molarweight": 92.141,
-        "chemical_record": {
-            "segments": [
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "C_arom",
-                "CH3"
+        "segments": [
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "C_arom",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    5,
-                    0
-                ],
-                [
-                    5,
-                    6
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                5,
+                0
+            ],
+            [
+                5,
+                6
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -1387,53 +1261,50 @@
             "inchi": "InChI=1/C8H10/c1-2-8-6-4-3-5-7-8/h3-7H,2H2,1H3",
             "formula": "C8H10"
         },
-        "molarweight": 106.167,
-        "chemical_record": {
-            "segments": [
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "C_arom",
-                "CH2",
-                "CH3"
+        "segments": [
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "C_arom",
+            "CH2",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    5,
-                    0
-                ],
-                [
-                    5,
-                    6
-                ],
-                [
-                    6,
-                    7
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                5,
+                0
+            ],
+            [
+                5,
+                6
+            ],
+            [
+                6,
+                7
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -1444,53 +1315,50 @@
             "inchi": "InChI=1S/C8H10/c1-7-4-3-5-8(2)6-7/h3-6H,1-2H3",
             "formula": "C8H10"
         },
-        "molarweight": 106.167,
-        "chemical_record": {
-            "segments": [
-                "CH_arom",
-                "C_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "C_arom",
-                "CH3",
-                "CH3"
+        "segments": [
+            "CH_arom",
+            "C_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "C_arom",
+            "CH3",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    5,
-                    0
-                ],
-                [
-                    1,
-                    6
-                ],
-                [
-                    5,
-                    7
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                5,
+                0
+            ],
+            [
+                1,
+                6
+            ],
+            [
+                5,
+                7
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -1501,53 +1369,50 @@
             "inchi": "InChI=1S/C8H10/c1-7-5-3-4-6-8(7)2/h3-6H,1-2H3",
             "formula": "C8H10"
         },
-        "molarweight": 106.167,
-        "chemical_record": {
-            "segments": [
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "C_arom",
-                "C_arom",
-                "CH3",
-                "CH3"
+        "segments": [
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "C_arom",
+            "C_arom",
+            "CH3",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    5,
-                    0
-                ],
-                [
-                    4,
-                    6
-                ],
-                [
-                    5,
-                    7
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                5,
+                0
+            ],
+            [
+                4,
+                6
+            ],
+            [
+                5,
+                7
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -1558,53 +1423,50 @@
             "inchi": "InChI=1S/C8H10/c1-7-3-5-8(2)6-4-7/h3-6H,1-2H3",
             "formula": "C8H10"
         },
-        "molarweight": 106.167,
-        "chemical_record": {
-            "segments": [
-                "C_arom",
-                "CH_arom",
-                "CH_arom",
-                "C_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH3",
-                "CH3"
+        "segments": [
+            "C_arom",
+            "CH_arom",
+            "CH_arom",
+            "C_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH3",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    5,
-                    0
-                ],
-                [
-                    0,
-                    6
-                ],
-                [
-                    3,
-                    7
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                5,
+                0
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                3,
+                7
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -1615,58 +1477,55 @@
             "inchi": "InChI=1/C9H12/c1-2-6-9-7-4-3-5-8-9/h3-5,7-8H,2,6H2,1H3",
             "formula": "C9H12"
         },
-        "molarweight": 120.194,
-        "chemical_record": {
-            "segments": [
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "C_arom",
-                "CH2",
-                "CH2",
-                "CH3"
+        "segments": [
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "C_arom",
+            "CH2",
+            "CH2",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    5,
-                    0
-                ],
-                [
-                    5,
-                    6
-                ],
-                [
-                    6,
-                    7
-                ],
-                [
-                    7,
-                    8
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                5,
+                0
+            ],
+            [
+                5,
+                6
+            ],
+            [
+                6,
+                7
+            ],
+            [
+                7,
+                8
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -1677,67 +1536,64 @@
             "inchi": "InChI=1/C10H12/c1-2-6-10-8-4-3-7-9(10)5-1/h1-2,5-6H,3-4,7-8H2",
             "formula": "C10H12"
         },
-        "molarweight": 132.205,
-        "chemical_record": {
-            "segments": [
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "C_arom",
-                "C_arom",
-                "CH2_hex",
-                "CH2_hex",
-                "CH2_hex",
-                "CH2_hex"
+        "segments": [
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "C_arom",
+            "C_arom",
+            "CH2_hex",
+            "CH2_hex",
+            "CH2_hex",
+            "CH2_hex"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    5,
-                    0
-                ],
-                [
-                    5,
-                    6
-                ],
-                [
-                    6,
-                    7
-                ],
-                [
-                    7,
-                    8
-                ],
-                [
-                    8,
-                    9
-                ],
-                [
-                    9,
-                    4
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                5,
+                0
+            ],
+            [
+                5,
+                6
+            ],
+            [
+                6,
+                7
+            ],
+            [
+                7,
+                8
+            ],
+            [
+                8,
+                9
+            ],
+            [
+                9,
+                4
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -1748,63 +1604,60 @@
             "inchi": "InChI=1/C10H14/c1-2-3-7-10-8-5-4-6-9-10/h4-6,8-9H,2-3,7H2,1H3",
             "formula": "C10H14"
         },
-        "molarweight": 134.221,
-        "chemical_record": {
-            "segments": [
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "C_arom",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
+        "segments": [
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "C_arom",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    5,
-                    0
-                ],
-                [
-                    5,
-                    6
-                ],
-                [
-                    6,
-                    7
-                ],
-                [
-                    7,
-                    8
-                ],
-                [
-                    8,
-                    9
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                5,
+                0
+            ],
+            [
+                5,
+                6
+            ],
+            [
+                6,
+                7
+            ],
+            [
+                7,
+                8
+            ],
+            [
+                8,
+                9
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -1815,77 +1668,74 @@
             "inchi": "InChI=1/C12H10/c1-3-7-11(8-4-1)12-9-5-2-6-10-12/h1-10H",
             "formula": "C12H10"
         },
-        "molarweight": 154.211,
-        "chemical_record": {
-            "segments": [
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "C_arom",
-                "C_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom",
-                "CH_arom"
+        "segments": [
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "C_arom",
+            "C_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom",
+            "CH_arom"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    3,
-                    4
-                ],
-                [
-                    4,
-                    5
-                ],
-                [
-                    5,
-                    0
-                ],
-                [
-                    5,
-                    6
-                ],
-                [
-                    6,
-                    7
-                ],
-                [
-                    7,
-                    8
-                ],
-                [
-                    8,
-                    9
-                ],
-                [
-                    9,
-                    10
-                ],
-                [
-                    10,
-                    11
-                ],
-                [
-                    11,
-                    6
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                5,
+                0
+            ],
+            [
+                5,
+                6
+            ],
+            [
+                6,
+                7
+            ],
+            [
+                7,
+                8
+            ],
+            [
+                8,
+                9
+            ],
+            [
+                9,
+                10
+            ],
+            [
+                10,
+                11
+            ],
+            [
+                11,
+                6
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -1896,13 +1746,10 @@
             "inchi": "InChI=1/C2H6O/c1-3-2/h1-2H3",
             "formula": "C2H6O"
         },
-        "molarweight": 46.069,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "OCH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "OCH3"
+        ]
     },
     {
         "identifier": {
@@ -1913,15 +1760,12 @@
             "inchi": "InChI=1/C4H10O/c1-3-5-4-2/h3-4H2,1-2H3",
             "formula": "C4H10O"
         },
-        "molarweight": 74.123,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "OCH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "OCH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -1932,15 +1776,12 @@
             "inchi": "InChI=1/C4H10O/c1-3-4-5-2/h3-4H2,1-2H3",
             "formula": "C4H10O"
         },
-        "molarweight": 74.123,
-        "chemical_record": {
-            "segments": [
-                "OCH3",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "OCH3",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -1951,13 +1792,10 @@
             "inchi": "InChI=1/C2H4O2/c1-4-2-3/h2H,1H3",
             "formula": "C2H4O2"
         },
-        "molarweight": 60.053,
-        "chemical_record": {
-            "segments": [
-                "HCOO",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "HCOO",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -1968,14 +1806,11 @@
             "inchi": "InChI=1/C3H6O2/c1-2-5-3-4/h3H,2H2,1H3",
             "formula": "C3H6O2"
         },
-        "molarweight": 74.079,
-        "chemical_record": {
-            "segments": [
-                "HCOO",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "HCOO",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -1986,15 +1821,12 @@
             "inchi": "InChI=1/C4H8O2/c1-2-3-6-4-5/h4H,2-3H2,1H3",
             "formula": "C4H8O2"
         },
-        "molarweight": 88.106,
-        "chemical_record": {
-            "segments": [
-                "HCOO",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "HCOO",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -2005,15 +1837,12 @@
             "inchi": "InChI=1/C4H8O2/c1-3-6-4(2)5/h3H2,1-2H3",
             "formula": "C4H8O2"
         },
-        "molarweight": 88.106,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "COO",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "COO",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -2024,16 +1853,13 @@
             "inchi": "InChI=1/C5H10O2/c1-3-4-7-5(2)6/h3-4H2,1-2H3",
             "formula": "C5H10O2"
         },
-        "molarweight": 102.133,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "COO",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "COO",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -2044,17 +1870,14 @@
             "inchi": "InChI=1/C6H12O2/c1-3-4-5-8-6(2)7/h3-5H2,1-2H3",
             "formula": "C6H12O2"
         },
-        "molarweight": 116.16,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "COO",
-                "CH2",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "COO",
+            "CH2",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -2065,34 +1888,31 @@
             "inchi": "InChI=1/C5H10O2/c1-4(2)7-5(3)6/h4H,1-3H3",
             "formula": "C5H10O2"
         },
-        "molarweight": 102.133,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                ">CH",
-                "COO",
-                "CH3",
-                "CH3"
+        "segments": [
+            "CH3",
+            ">CH",
+            "COO",
+            "CH3",
+            "CH3"
+        ],
+        "bonds": [
+            [
+                0,
+                1
             ],
-            "bonds": [
-                [
-                    0,
-                    1
-                ],
-                [
-                    1,
-                    2
-                ],
-                [
-                    2,
-                    3
-                ],
-                [
-                    1,
-                    4
-                ]
+            [
+                1,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                1,
+                4
             ]
-        }
+        ]
     },
     {
         "identifier": {
@@ -2103,15 +1923,12 @@
             "inchi": "InChI=1/C4H8O2/c1-3-4(5)6-2/h3H2,1-2H3",
             "formula": "C4H8O2"
         },
-        "molarweight": 88.106,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "COO",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "COO",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -2122,16 +1939,13 @@
             "inchi": "InChI=1/C5H10O2/c1-3-5(6)7-4-2/h3-4H2,1-2H3",
             "formula": "C5H10O2"
         },
-        "molarweight": 102.133,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "COO",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "COO",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -2142,17 +1956,14 @@
             "inchi": "InChI=1/C6H12O2/c1-3-5-8-6(7)4-2/h3-5H2,1-2H3",
             "formula": "C6H12O2"
         },
-        "molarweight": 116.16,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "COO",
-                "CH2",
-                "CH2",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "COO",
+            "CH2",
+            "CH2",
+            "CH3"
+        ]
     },
     {
         "identifier": {
@@ -2163,15 +1974,12 @@
             "inchi": "InChI=1/C5H10O2/c1-3-4-5(6)7-2/h3-4H2,1-2H3",
             "formula": "C5H10O2"
         },
-        "molarweight": 102.133,
-        "chemical_record": {
-            "segments": [
-                "CH3",
-                "CH2",
-                "CH2",
-                "COO",
-                "CH3"
-            ]
-        }
+        "segments": [
+            "CH3",
+            "CH2",
+            "CH2",
+            "COO",
+            "CH3"
+        ]
     }
 ]
