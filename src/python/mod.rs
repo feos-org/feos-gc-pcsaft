@@ -10,6 +10,7 @@ mod eos;
 mod micelles;
 mod parameter;
 use dft::*;
+pub use eos::PyGcPcSaft;
 use eos::*;
 use parameter::*;
 
@@ -19,11 +20,9 @@ pub fn feos_gc_pcsaft(py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_class::<PyVerbosity>()?;
     m.add_class::<PyContributions>()?;
     m.add_class::<PyChemicalRecord>()?;
-    m.add_class::<PyChemicalRecord>()?;
     m.add_class::<PyJobackRecord>()?;
 
     m.add_class::<PyGcPcSaftRecord>()?;
-    m.add_class::<PyPureRecord>()?;
     m.add_class::<PySegmentRecord>()?;
     m.add_class::<PyBinaryRecord>()?;
     m.add_class::<PyBinarySegmentRecord>()?;

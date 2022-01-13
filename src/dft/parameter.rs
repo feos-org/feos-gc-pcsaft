@@ -1,7 +1,7 @@
 use crate::record::GcPcSaftRecord;
 use feos_core::joback::JobackRecord;
 use feos_core::parameter::{
-    BinaryRecord, GroupContributionRecord, IdentifierOption, ParameterError, SegmentRecord,
+    BinaryRecord, ChemicalRecord, IdentifierOption, ParameterError, SegmentRecord,
 };
 use indexmap::{IndexMap, IndexSet};
 use ndarray::{Array1, Array2};
@@ -35,14 +35,14 @@ pub struct GcPcSaftFunctionalParameters {
     pub epsilon_k_ij: Array2<f64>,
     pub sigma3_kappa_aibj: Array2<f64>,
     pub epsilon_k_aibj: Array2<f64>,
-    pure_records: Vec<GroupContributionRecord>,
+    chemical_records: Vec<ChemicalRecord>,
     segment_records: Vec<SegmentRecord<GcPcSaftRecord, JobackRecord>>,
     binary_segment_records: Option<Vec<BinaryRecord<String, f64>>>,
 }
 
 impl GcPcSaftFunctionalParameters {
     pub fn from_segments(
-        pure_records: Vec<GroupContributionRecord>,
+        chemical_records: Vec<ChemicalRecord>,
         segment_records: Vec<SegmentRecord<GcPcSaftRecord, JobackRecord>>,
         binary_segment_records: Option<Vec<BinaryRecord<String, f64>>>,
     ) -> Result<Self, ParameterError> {
@@ -51,7 +51,7 @@ impl GcPcSaftFunctionalParameters {
             .map(|r| (r.identifier.clone(), r.clone()))
             .collect();
 
-        let mut molarweight = Array1::zeros(pure_records.len());
+        let mut molarweight = Array1::zeros(chemical_records.len());
         let mut component_index = Vec::new();
         let mut identifiers = Vec::new();
         let mut m = Vec::new();
@@ -66,13 +66,10 @@ impl GcPcSaftFunctionalParameters {
         let mut psi_dft = Vec::new();
 
         let mut segment_index = 0;
-        for (i, record) in pure_records.iter().enumerate() {
-            let chemical_record = record
-                .chemical_record
-                .as_ref()
-                .ok_or(ParameterError::InsufficientInformation)?;
+        for (i, chemical_record) in chemical_records.iter().enumerate() {
+            let (segment_list, bond_list) = chemical_record.segment_and_bond_list()?;
 
-            bonds.extend_with_edges(chemical_record.bonds.iter().map(|x| {
+            bonds.extend_with_edges(bond_list.iter().map(|x| {
                 (
                     (segment_index + x[0]) as u32,
                     (segment_index + x[1]) as u32,
@@ -80,7 +77,7 @@ impl GcPcSaftFunctionalParameters {
                 )
             }));
 
-            for id in &chemical_record.segments {
+            for id in segment_list {
                 let segment = segment_map
                     .get(id)
                     .ok_or_else(|| ParameterError::ComponentsNotFound(id.to_string()))?;
@@ -168,7 +165,7 @@ impl GcPcSaftFunctionalParameters {
             epsilon_k_ij,
             sigma3_kappa_aibj,
             epsilon_k_aibj,
-            pure_records,
+            chemical_records,
             segment_records,
             binary_segment_records,
         })
@@ -190,12 +187,12 @@ impl GcPcSaftFunctionalParameters {
             .collect();
 
         let reader = BufReader::new(File::open(file_pure)?);
-        let pure_records: Vec<GroupContributionRecord> = serde_json::from_reader(reader)?;
-        let mut record_map: IndexMap<_, _> = pure_records
+        let chemical_records: Vec<ChemicalRecord> = serde_json::from_reader(reader)?;
+        let mut record_map: IndexMap<_, _> = chemical_records
             .into_iter()
             .filter_map(|record| {
                 record
-                    .identifier
+                    .identifier()
                     .as_string(search_option)
                     .map(|i| (i, record))
             })
@@ -212,7 +209,7 @@ impl GcPcSaftFunctionalParameters {
         };
 
         // Collect all pure records that were queried
-        let pure_records: Vec<_> = queried
+        let chemical_records: Vec<_> = queried
             .iter()
             .filter_map(|identifier| record_map.remove(&identifier.clone()))
             .collect();
@@ -231,16 +228,16 @@ impl GcPcSaftFunctionalParameters {
             })
             .transpose()?;
 
-        Self::from_segments(pure_records, segment_records, binary_records)
+        Self::from_segments(chemical_records, segment_records, binary_records)
     }
 
     pub fn subset(&self, component_list: &[usize]) -> Self {
-        let pure_records: Vec<_> = component_list
+        let chemical_records: Vec<_> = component_list
             .iter()
-            .map(|&i| self.pure_records[i].clone())
+            .map(|&i| self.chemical_records[i].clone())
             .collect();
         Self::from_segments(
-            pure_records,
+            chemical_records,
             self.segment_records.clone(),
             self.binary_segment_records.clone(),
         )
@@ -266,7 +263,7 @@ impl GcPcSaftFunctionalParameters {
             let component = if i > 0 && self.component_index[i] == self.component_index[i - 1] {
                 "|".to_string()
             } else {
-                let pure = &self.pure_records[self.component_index[i]].identifier;
+                let pure = self.chemical_records[self.component_index[i]].identifier();
                 format!(
                     "{}|{}",
                     pure.name.as_ref().unwrap_or(&pure.cas),
@@ -328,7 +325,7 @@ impl std::fmt::Display for GcPcSaftFunctionalParameters {
 // #[cfg(test)]
 // pub mod test {
 //     use super::*;
-//     use feos_core::parameter::{ChemicalRecord, GroupContributionRecord, Identifier};
+//     use feos_core::parameter::{ChemicalRecord, ChemicalRecord, Identifier};
 
 //     fn ch3() -> SegmentRecord<GcPcSaftRecord, JobackRecord> {
 //         SegmentRecord::new(
@@ -372,7 +369,7 @@ impl std::fmt::Display for GcPcSaftFunctionalParameters {
 //     }
 
 //     pub fn propane() -> GcPcSaftFunctionalParameters {
-//         let pure = GroupContributionRecord::new(
+//         let pure = ChemicalRecord::new(
 //             Identifier::new("74-98-6", Some("propane"), None, None, None, None),
 //             0.0,
 //             Some(ChemicalRecord::new(
@@ -386,7 +383,7 @@ impl std::fmt::Display for GcPcSaftFunctionalParameters {
 //     }
 
 //     pub fn propanol() -> GcPcSaftFunctionalParameters {
-//         let pure = GroupContributionRecord::new(
+//         let pure = ChemicalRecord::new(
 //             Identifier::new("71-23-8", Some("1-propanol"), None, None, None, None),
 //             0.0,
 //             Some(ChemicalRecord::new(
@@ -401,7 +398,7 @@ impl std::fmt::Display for GcPcSaftFunctionalParameters {
 //     }
 
 //     pub fn ethanol_propanol(binary: bool) -> GcPcSaftFunctionalParameters {
-//         let ethanol = GroupContributionRecord::new(
+//         let ethanol = ChemicalRecord::new(
 //             Identifier::new("64-17-5", Some("ethanol"), None, None, None, None),
 //             0.0,
 //             Some(ChemicalRecord::new(
@@ -411,7 +408,7 @@ impl std::fmt::Display for GcPcSaftFunctionalParameters {
 //             None,
 //             None,
 //         );
-//         let propanol = GroupContributionRecord::new(
+//         let propanol = ChemicalRecord::new(
 //             Identifier::new("71-23-8", Some("1-propanol"), None, None, None, None),
 //             0.0,
 //             Some(ChemicalRecord::new(

@@ -1,8 +1,7 @@
 use crate::record::GcPcSaftRecord;
 use feos_core::joback::JobackRecord;
 use feos_core::parameter::{
-    BinaryRecord, FromSegments, GroupContributionRecord, IdentifierOption, ParameterError,
-    SegmentRecord,
+    BinaryRecord, ChemicalRecord, FromSegments, IdentifierOption, ParameterError, SegmentRecord,
 };
 use indexmap::{IndexMap, IndexSet};
 use ndarray::{Array1, Array2};
@@ -10,8 +9,6 @@ use std::fmt::Write;
 use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
-
-// pub type GcPcSaftEosParameters = GcPcSaftParameters<IndexMap<[usize; 2], f64>>;
 
 pub struct GcPcSaftEosParameters {
     pub molarweight: Array1<f64>,
@@ -35,8 +32,7 @@ pub struct GcPcSaftEosParameters {
     pub epsilon_k_ij: Array2<f64>,
     pub sigma3_kappa_aibj: Array2<f64>,
     pub epsilon_k_aibj: Array2<f64>,
-    // pub max_eta: f64,
-    pub pure_records: Vec<GroupContributionRecord>,
+    pub chemical_records: Vec<ChemicalRecord>,
     segment_records: Vec<SegmentRecord<GcPcSaftRecord, JobackRecord>>,
     binary_segment_records: Option<Vec<BinaryRecord<String, f64>>>,
     pub joback_records: Option<Vec<JobackRecord>>,
@@ -44,7 +40,7 @@ pub struct GcPcSaftEosParameters {
 
 impl GcPcSaftEosParameters {
     pub fn from_segments(
-        pure_records: Vec<GroupContributionRecord>,
+        chemical_records: Vec<ChemicalRecord>,
         segment_records: Vec<SegmentRecord<GcPcSaftRecord, JobackRecord>>,
         binary_segment_records: Option<Vec<BinaryRecord<String, f64>>>,
     ) -> Result<Self, ParameterError> {
@@ -53,7 +49,7 @@ impl GcPcSaftEosParameters {
             .map(|r| (r.identifier.clone(), r.clone()))
             .collect();
 
-        let mut molarweight = Array1::zeros(pure_records.len());
+        let mut molarweight = Array1::zeros(chemical_records.len());
         let mut component_index = Vec::new();
         let mut identifiers = Vec::new();
         let mut m = Vec::new();
@@ -68,29 +64,27 @@ impl GcPcSaftEosParameters {
 
         let mut joback_records = Vec::new();
 
-        for (i, record) in pure_records.iter().enumerate() {
-            let chemical_record = record
-                .chemical_record
-                .as_ref()
-                .ok_or(ParameterError::InsufficientInformation)?;
-
+        for (i, chemical_record) in chemical_records.iter().enumerate() {
             let mut segment_indices = IndexMap::with_capacity(segment_records.len());
-            let mut count = IndexMap::new();
-            for id in &chemical_record.segments {
-                let segment = segment_map
-                    .get(id)
-                    .ok_or_else(|| ParameterError::ComponentsNotFound(id.to_string()))?;
-                let count = count.entry(segment.clone()).or_insert(0.0);
-                *count += 1.0;
-            }
-            for (segment, count) in count.into_iter() {
+            let (segment_counts, bond_counts) = chemical_record.segment_and_bond_count();
+            let count: IndexMap<_, _> = segment_counts
+                .iter()
+                .map(|(id, &count)| {
+                    let segment = segment_map
+                        .get(id)
+                        .ok_or_else(|| ParameterError::ComponentsNotFound(id.clone()))?;
+                    Ok((segment, count))
+                })
+                .collect::<Result<_, ParameterError>>()?;
+
+            for (segment, count) in count.iter() {
                 segment_indices.insert(segment.identifier.clone(), m.len());
 
-                molarweight[i] += segment.molarweight * count as f64;
+                molarweight[i] += segment.molarweight * count;
 
                 component_index.push(i);
-                identifiers.push(segment.identifier);
-                m.push(segment.model_record.m * count as f64);
+                identifiers.push(segment.identifier.clone());
+                m.push(segment.model_record.m * count);
                 sigma.push(segment.model_record.sigma);
                 epsilon_k.push(segment.model_record.epsilon_k);
 
@@ -106,18 +100,17 @@ impl GcPcSaftEosParameters {
                 }
             }
 
-            for b in &chemical_record.bonds {
-                let s1 = &chemical_record.segments[b[0]];
-                let s2 = &chemical_record.segments[b[1]];
-                let i1 = *segment_indices.get(s1).unwrap();
-                let i2 = *segment_indices.get(s2).unwrap();
-                let indices = if i1 > i2 { [i2, i1] } else { [i1, i2] };
-                let bond = bonds.entry(indices).or_insert(0.0);
-                *bond += 1.0;
+            for (b, &count) in bond_counts.iter() {
+                let i1 = segment_indices.get(&b[0]);
+                let i2 = segment_indices.get(&b[1]);
+                if let (Some(&i1), Some(&i2)) = (i1, i2) {
+                    let indices = if i1 > i2 { [i2, i1] } else { [i1, i2] };
+                    let bond = bonds.entry(indices).or_insert(0.0);
+                    *bond += count;
+                }
             }
 
-            let segment_count = chemical_record.segment_count(&segment_records)?;
-            let ideal_gas_segments: Option<Vec<_>> = segment_count
+            let ideal_gas_segments: Option<Vec<_>> = count
                 .iter()
                 .map(|(s, &n)| s.ideal_gas_record.clone().map(|ig| (ig, n)))
                 .collect();
@@ -188,7 +181,7 @@ impl GcPcSaftEosParameters {
             epsilon_k_ij,
             sigma3_kappa_aibj,
             epsilon_k_aibj,
-            pure_records,
+            chemical_records,
             segment_records,
             binary_segment_records,
             joback_records: joback_records.into_iter().collect(),
@@ -211,12 +204,12 @@ impl GcPcSaftEosParameters {
             .collect();
 
         let reader = BufReader::new(File::open(file_pure)?);
-        let pure_records: Vec<GroupContributionRecord> = serde_json::from_reader(reader)?;
-        let mut record_map: IndexMap<_, _> = pure_records
+        let chemical_records: Vec<ChemicalRecord> = serde_json::from_reader(reader)?;
+        let mut record_map: IndexMap<_, _> = chemical_records
             .into_iter()
             .filter_map(|record| {
                 record
-                    .identifier
+                    .identifier()
                     .as_string(search_option)
                     .map(|i| (i, record))
             })
@@ -233,7 +226,7 @@ impl GcPcSaftEosParameters {
         };
 
         // Collect all pure records that were queried
-        let pure_records: Vec<_> = queried
+        let chemical_records: Vec<_> = queried
             .iter()
             .filter_map(|identifier| record_map.remove(&identifier.clone()))
             .collect();
@@ -252,16 +245,16 @@ impl GcPcSaftEosParameters {
             })
             .transpose()?;
 
-        Self::from_segments(pure_records, segment_records, binary_records)
+        Self::from_segments(chemical_records, segment_records, binary_records)
     }
 
     pub fn subset(&self, component_list: &[usize]) -> Self {
-        let pure_records: Vec<_> = component_list
+        let chemical_records: Vec<_> = component_list
             .iter()
-            .map(|&i| self.pure_records[i].clone())
+            .map(|&i| self.chemical_records[i].clone())
             .collect();
         Self::from_segments(
-            pure_records,
+            chemical_records,
             self.segment_records.clone(),
             self.binary_segment_records.clone(),
         )
@@ -280,7 +273,7 @@ impl GcPcSaftEosParameters {
             let component = if i > 0 && self.component_index[i] == self.component_index[i - 1] {
                 "|".to_string()
             } else {
-                let pure = &self.pure_records[self.component_index[i]].identifier;
+                let pure = self.chemical_records[self.component_index[i]].identifier();
                 format!(
                     "{}|{}",
                     pure.name.as_ref().unwrap_or(&pure.cas),
@@ -311,7 +304,7 @@ impl GcPcSaftEosParameters {
 
         let mut last_component = None;
         for ([c1, c2], &c) in &self.bonds {
-            let pure = &self.pure_records[self.component_index[*c1]].identifier;
+            let pure = self.chemical_records[self.component_index[*c1]].identifier();
             let component = if let Some(last) = last_component {
                 if last == pure {
                     ""
@@ -358,7 +351,7 @@ impl std::fmt::Display for GcPcSaftEosParameters {
 #[cfg(test)]
 pub mod test {
     use super::*;
-    use feos_core::parameter::{ChemicalRecord, GroupContributionRecord, Identifier};
+    use feos_core::parameter::{ChemicalRecord, Identifier};
 
     fn ch3() -> SegmentRecord<GcPcSaftRecord, JobackRecord> {
         SegmentRecord::new(
@@ -407,52 +400,32 @@ pub mod test {
     }
 
     pub fn propane() -> GcPcSaftEosParameters {
-        let pure = GroupContributionRecord::new(
+        let pure = ChemicalRecord::new(
             Identifier::new("74-98-6", Some("propane"), None, None, None, None),
-            0.0,
-            Some(ChemicalRecord::new(
-                vec!["CH3".into(), "CH2".into(), "CH3".into()],
-                None,
-            )),
-            None,
+            vec!["CH3".into(), "CH2".into(), "CH3".into()],
             None,
         );
         GcPcSaftEosParameters::from_segments(vec![pure], vec![ch3(), ch2()], None).unwrap()
     }
 
     pub fn propanol() -> GcPcSaftEosParameters {
-        let pure = GroupContributionRecord::new(
+        let pure = ChemicalRecord::new(
             Identifier::new("71-23-8", Some("1-propanol"), None, None, None, None),
-            0.0,
-            Some(ChemicalRecord::new(
-                vec!["CH3".into(), "CH2".into(), "CH2".into(), "OH".into()],
-                None,
-            )),
-            None,
+            vec!["CH3".into(), "CH2".into(), "CH2".into(), "OH".into()],
             None,
         );
         GcPcSaftEosParameters::from_segments(vec![pure], vec![ch3(), ch2(), oh()], None).unwrap()
     }
 
     pub fn ethanol_propanol(binary: bool) -> GcPcSaftEosParameters {
-        let ethanol = GroupContributionRecord::new(
+        let ethanol = ChemicalRecord::new(
             Identifier::new("64-17-5", Some("ethanol"), None, None, None, None),
-            0.0,
-            Some(ChemicalRecord::new(
-                vec!["CH3".into(), "CH2".into(), "OH".into()],
-                None,
-            )),
-            None,
+            vec!["CH3".into(), "CH2".into(), "OH".into()],
             None,
         );
-        let propanol = GroupContributionRecord::new(
+        let propanol = ChemicalRecord::new(
             Identifier::new("71-23-8", Some("1-propanol"), None, None, None, None),
-            0.0,
-            Some(ChemicalRecord::new(
-                vec!["CH3".into(), "CH2".into(), "CH2".into(), "OH".into()],
-                None,
-            )),
-            None,
+            vec!["CH3".into(), "CH2".into(), "CH2".into(), "OH".into()],
             None,
         );
         let binary = if binary { Some(vec![ch3_oh()]) } else { None };

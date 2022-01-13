@@ -72,7 +72,7 @@ impl GcPcSaft {
             options,
             contributions,
             joback: parameters.joback_records.clone().map_or_else(
-                || Joback::default(parameters.pure_records.len()),
+                || Joback::default(parameters.chemical_records.len()),
                 Joback::new,
             ),
         }

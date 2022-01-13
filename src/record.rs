@@ -64,7 +64,7 @@ impl GcPcSaftRecord {
 
 impl std::fmt::Display for GcPcSaftRecord {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, ", m={}", self.m)?;
+        write!(f, "GcPcSaftRecord(m={}", self.m)?;
         write!(f, ", sigma={}", self.sigma)?;
         write!(f, ", epsilon_k={}", self.epsilon_k)?;
         if let Some(n) = &self.mu {
@@ -85,7 +85,7 @@ impl std::fmt::Display for GcPcSaftRecord {
         if let Some(n) = &self.nb {
             write!(f, ", nb={}", n)?;
         }
-        Ok(())
+        write!(f, ")")
     }
 }
 

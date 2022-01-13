@@ -2,16 +2,10 @@ use crate::dft::GcPcSaftFunctionalParameters;
 use crate::eos::GcPcSaftEosParameters;
 use crate::record::GcPcSaftRecord;
 use feos_core::joback::JobackRecord;
-use feos_core::parameter::{
-    BinaryRecord, IdentifierOption, NoRecord, ParameterError, PureRecord, SegmentRecord,
-};
+use feos_core::parameter::{BinaryRecord, IdentifierOption, ParameterError, SegmentRecord};
 use feos_core::python::joback::PyJobackRecord;
-use feos_core::python::parameter::{
-    PyBinarySegmentRecord, PyChemicalRecord, PyIdentifier, PyNoRecord,
-};
-use feos_core::{
-    impl_json_handling, impl_parameter_from_segments, impl_pure_record, impl_segment_record,
-};
+use feos_core::python::parameter::{PyBinarySegmentRecord, PyChemicalRecord};
+use feos_core::{impl_json_handling, impl_parameter_from_segments, impl_segment_record};
 use numpy::{PyArray2, ToPyArray};
 use pyo3::prelude::*;
 use std::convert::TryFrom;
@@ -63,7 +57,6 @@ impl pyo3::class::basic::PyObjectProtocol for PyGcPcSaftRecord {
 
 impl_json_handling!(PyGcPcSaftRecord);
 
-impl_pure_record!(NoRecord, PyNoRecord, NoRecord, PyNoRecord);
 impl_segment_record!(
     GcPcSaftRecord,
     PyGcPcSaftRecord,
