@@ -5,6 +5,7 @@ use feos_core::parameter::{
 };
 use indexmap::{IndexMap, IndexSet};
 use ndarray::{Array1, Array2};
+use quantity::si::{JOULE, KB, KELVIN};
 use std::fmt::Write;
 use std::fs::File;
 use std::io::BufReader;
@@ -14,24 +15,31 @@ pub struct GcPcSaftEosParameters {
     pub molarweight: Array1<f64>,
     pub component_index: Array1<usize>,
     identifiers: Vec<String>,
+
     pub m: Array1<f64>,
     pub sigma: Array1<f64>,
     pub epsilon_k: Array1<f64>,
     pub bonds: IndexMap<[usize; 2], f64>,
-    // pub mu: Array1<f64>,
-    // pub q: Array1<f64>,
-    // pub mu2: Array1<f64>,
-    // pub q2: Array1<f64>,
+
     pub assoc_segment: Array1<usize>,
+    pub n: Array1<f64>,
     kappa_ab: Array1<f64>,
     epsilon_k_ab: Array1<f64>,
     pub na: Array1<f64>,
     pub nb: Array1<f64>,
+
+    pub dipole_comp: Array1<usize>,
+    mu: Array1<f64>,
+    pub mu2: Array1<f64>,
+    pub m_mix: Array1<f64>,
+    pub e_k_ij: Array2<f64>,
+
     pub k_ij: Array2<f64>,
     pub sigma_ij: Array2<f64>,
     pub epsilon_k_ij: Array2<f64>,
     pub sigma3_kappa_aibj: Array2<f64>,
     pub epsilon_k_aibj: Array2<f64>,
+
     pub chemical_records: Vec<ChemicalRecord>,
     segment_records: Vec<SegmentRecord<GcPcSaftRecord, JobackRecord>>,
     binary_segment_records: Option<Vec<BinaryRecord<String, f64>>>,
@@ -57,10 +65,16 @@ impl GcPcSaftEosParameters {
         let mut epsilon_k = Vec::new();
         let mut bonds = IndexMap::with_capacity(segment_records.len());
         let mut assoc_segment = Vec::new();
+        let mut n = Vec::new();
         let mut kappa_ab = Vec::new();
         let mut epsilon_k_ab = Vec::new();
         let mut na = Vec::new();
         let mut nb = Vec::new();
+
+        let mut dipole_comp = Vec::new();
+        let mut mu = Vec::new();
+        let mut mu2 = Vec::new();
+        let mut m_mix = Vec::new();
 
         let mut joback_records = Vec::new();
 
@@ -76,6 +90,9 @@ impl GcPcSaftEosParameters {
                     Ok((segment, count))
                 })
                 .collect::<Result<_, ParameterError>>()?;
+
+            let mut m_i = 0.0;
+            let mut mu2_i = 0.0;
 
             for (segment, count) in count.iter() {
                 segment_indices.insert(segment.identifier.clone(), m.len());
@@ -93,11 +110,24 @@ impl GcPcSaftEosParameters {
                     segment.model_record.epsilon_k_ab,
                 ) {
                     assoc_segment.push(m.len() - 1);
+                    n.push(*count);
                     kappa_ab.push(k);
                     epsilon_k_ab.push(e);
                     na.push(segment.model_record.na.unwrap_or(1.0));
                     nb.push(segment.model_record.nb.unwrap_or(1.0));
                 }
+
+                m_i += segment.model_record.m * count;
+                if let Some(mu) = segment.model_record.mu {
+                    mu2_i += mu.powi(2) * count;
+                }
+            }
+
+            if mu2_i > 0.0 {
+                dipole_comp.push(i);
+                mu.push(mu2_i.sqrt());
+                mu2.push(mu2_i / m_i / (1e-19 * (JOULE / KELVIN / KB).into_value().unwrap()));
+                m_mix.push(m_i);
             }
 
             for (b, &count) in bond_counts.iter() {
@@ -150,9 +180,10 @@ impl GcPcSaftEosParameters {
         // Combining rules dispersion
         let sigma_ij =
             Array2::from_shape_fn([sigma.len(); 2], |(i, j)| 0.5 * (sigma[i] + sigma[j]));
-        let epsilon_k_ij = Array2::from_shape_fn([epsilon_k.len(); 2], |(i, j)| {
-            (epsilon_k[i] * epsilon_k[j]).sqrt() * (1.0 - k_ij[(i, j)])
+        let e_k_ij = Array2::from_shape_fn([epsilon_k.len(); 2], |(i, j)| {
+            (epsilon_k[i] * epsilon_k[j]).sqrt()
         });
+        let epsilon_k_ij = &e_k_ij * (1.0 - &k_ij);
 
         // Association
         let sigma3_kappa_aibj = Array2::from_shape_fn([kappa_ab.len(); 2], |(i, j)| {
@@ -167,6 +198,7 @@ impl GcPcSaftEosParameters {
             molarweight,
             component_index: Array1::from_vec(component_index),
             identifiers,
+            n: Array1::from_vec(n),
             m: Array1::from_vec(m),
             sigma: Array1::from_vec(sigma),
             epsilon_k: Array1::from_vec(epsilon_k),
@@ -176,6 +208,11 @@ impl GcPcSaftEosParameters {
             epsilon_k_ab: Array1::from_vec(epsilon_k_ab),
             na: Array1::from_vec(na),
             nb: Array1::from_vec(nb),
+            dipole_comp: Array1::from_vec(dipole_comp),
+            mu: Array1::from_vec(mu),
+            mu2: Array1::from_vec(mu2),
+            m_mix: Array1::from_vec(m_mix),
+            e_k_ij,
             k_ij,
             sigma_ij,
             epsilon_k_ij,
@@ -266,18 +303,23 @@ impl GcPcSaftEosParameters {
         let o = &mut output;
         write!(
             o,
-            "|component|molarweight|segment|$m$|$\\sigma$|$\\varepsilon$|$\\kappa_{{AB}}$|$\\varepsilon_{{AB}}$|$N_A$|$N_B$|$\\mu$|$Q$|\n|-|-|-|-|-|-|-|-|-|-|-|-|"
+            "|component|molarweight|dipole moment|segment|count|$m$|$\\sigma$|$\\varepsilon$|$\\kappa_{{AB}}$|$\\varepsilon_{{AB}}$|$N_A$|$N_B$|$\\mu$|$Q$|\n|-|-|-|-|-|-|-|-|-|-|-|-|-|-|"
         )
         .unwrap();
         for i in 0..self.m.len() {
             let component = if i > 0 && self.component_index[i] == self.component_index[i - 1] {
-                "|".to_string()
+                "||".to_string()
             } else {
                 let pure = self.chemical_records[self.component_index[i]].identifier();
                 format!(
-                    "{}|{}",
+                    "{}|{}|{}",
                     pure.name.as_ref().unwrap_or(&pure.cas),
-                    self.molarweight[self.component_index[i]]
+                    self.molarweight[self.component_index[i]],
+                    if let Some(d) = self.dipole_comp.iter().position(|&d| d == i) {
+                        format!("{}", self.mu[d])
+                    } else {
+                        "".into()
+                    }
                 )
             };
             let association = if let Some(a) = self.assoc_segment.iter().position(|&a| a == i) {
@@ -290,9 +332,10 @@ impl GcPcSaftEosParameters {
             };
             write!(
                 o,
-                "\n|{}|{}|{}|{}|{}|{}|||",
+                "\n|{}|{}|{}|{}|{}|{}|{}|||",
                 component,
                 self.identifiers[i],
+                self.n[i],
                 self.m[i],
                 self.sigma[i],
                 self.epsilon_k[i],
@@ -344,6 +387,10 @@ impl std::fmt::Display for GcPcSaftEosParameters {
             write!(f, "\n\tna={}", self.na)?;
             write!(f, "\n\tnb={}", self.nb)?;
         }
+        if !self.dipole_comp.is_empty() {
+            write!(f, "\n\tdipole_comp={}", self.dipole_comp)?;
+            write!(f, "\n\tmu={}", self.mu)?;
+        }
         write!(f, "\n)")
     }
 }
@@ -357,9 +404,7 @@ pub mod test {
         SegmentRecord::new(
             "CH3".into(),
             15.0,
-            GcPcSaftRecord::new(
-                0.77247, 3.6937, 181.49, None, None, None, None, None, None, None,
-            ),
+            GcPcSaftRecord::new(0.77247, 3.6937, 181.49, None, None, None, None, None, None),
             None,
         )
     }
@@ -368,9 +413,7 @@ pub mod test {
         SegmentRecord::new(
             "CH2".into(),
             14.0,
-            GcPcSaftRecord::new(
-                0.7912, 3.0207, 157.23, None, None, None, None, None, None, None,
-            ),
+            GcPcSaftRecord::new(0.7912, 3.0207, 157.23, None, None, None, None, None, None),
             None,
         )
     }
@@ -383,7 +426,6 @@ pub mod test {
                 1.0231,
                 2.7702,
                 334.29,
-                None,
                 None,
                 Some(0.009583),
                 Some(2575.9),

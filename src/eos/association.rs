@@ -72,13 +72,14 @@ impl<D: DualNum<f64>> HelmholtzEnergyDual<D> for Association {
             // no cross association, two association sites
             let xa = assoc_site_frac_ab(deltarho, na, nb);
             let xb = (xa - 1.0) * (na / nb) + 1.0;
-
-            state.moles[c] * ((xa.ln() - xa * 0.5 + 0.5) * na + (xb.ln() - xb * 0.5 + 0.5) * nb)
+            state.moles[c]
+                * p.n[0]
+                * ((xa.ln() - xa * 0.5 + 0.5) * na + (xb.ln() - xb * 0.5 + 0.5) * nb)
         } else {
             // no cross association, one association site
             let xa = assoc_site_frac_a(deltarho, na);
 
-            state.moles[c] * (xa.ln() - xa * 0.5 + 0.5) * na
+            state.moles[c] * p.n[0] * (xa.ln() - xa * 0.5 + 0.5) * na
         }
     }
 }
@@ -122,7 +123,8 @@ impl<D: DualNum<f64> + ScalarOperand> HelmholtzEnergyDual<D> for CrossAssociatio
         // extract densities of associating segments
         let rho_assoc = p
             .assoc_segment
-            .mapv(|a| state.partial_density[p.component_index[a]]);
+            .mapv(|a| state.partial_density[p.component_index[a]])
+            * &p.n;
 
         helmholtz_energy_density_cross_association(
             &p.assoc_segment,
@@ -142,58 +144,6 @@ impl<D: DualNum<f64> + ScalarOperand> HelmholtzEnergyDual<D> for CrossAssociatio
         )
         .unwrap()
             * state.volume
-
-        // // association strength
-        // let nassoc = p.assoc_segment.len();
-        // let delta = Array::from_shape_fn([nassoc; 2], |(i, j)| {
-        //     association_strength(p, state.temperature, &diameter, n2, n3i, i, j)
-        // });
-
-        // // extract densities of associating segments
-        // let rho = Array::from_shape_fn(nassoc, |i| {
-        //     state.partial_density[p.component_index[p.assoc_segment[i]]]
-        // });
-
-        // // cross-association according to Michelsen2006
-        // // initialize monomer fraction
-        // let mut x = Array::from_elem(2 * nassoc, 0.2);
-        // for k in 0..self.max_iter {
-        //     if newton_step_cross_association::<f64>(
-        //         &mut x,
-        //         nassoc,
-        //         &delta.map(D::re),
-        //         &p.na,
-        //         &p.nb,
-        //         &rho.map(D::re),
-        //         self.tol,
-        //     )
-        //     .unwrap()
-        //     {
-        //         break;
-        //     }
-        //     if k == self.max_iter - 1 {
-        //         Err(EosError::NotConverged("Cross association".into())).unwrap()
-        //     }
-        // }
-        // // calculate derivatives
-        // let mut x_dual = x.mapv(D::from);
-        // for _ in 0..D::NDERIV {
-        //     newton_step_cross_association(
-        //         &mut x_dual,
-        //         nassoc,
-        //         &delta,
-        //         &p.na,
-        //         &p.nb,
-        //         &rho,
-        //         self.tol,
-        //     )
-        //     .unwrap();
-        // }
-        // // Helmholtz energy density
-        // let xa = x_dual.slice(s![..nassoc]);
-        // let xb = x_dual.slice(s![nassoc..]);
-        // let f = |x: D| x.ln() - x * 0.5 + 0.5;
-        // (rho * (xa.mapv(f) * &p.na + xb.mapv(f) * &p.nb)).sum() * state.volume
     }
 }
 

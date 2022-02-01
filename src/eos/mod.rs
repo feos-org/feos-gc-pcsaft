@@ -10,11 +10,13 @@ pub(crate) mod dispersion;
 mod hard_chain;
 mod hard_sphere;
 mod parameter;
+mod polar;
 use association::{Association, CrossAssociation};
 use dispersion::Dispersion;
 use hard_chain::HardChain;
 use hard_sphere::HardSphere;
 pub use parameter::GcPcSaftEosParameters;
+use polar::Dipole;
 
 #[derive(Copy, Clone)]
 pub struct GcPcSaftOptions {
@@ -34,7 +36,7 @@ impl Default for GcPcSaftOptions {
 }
 
 pub struct GcPcSaft {
-    parameters: Rc<GcPcSaftEosParameters>,
+    pub parameters: Rc<GcPcSaftEosParameters>,
     options: GcPcSaftOptions,
     contributions: Vec<Box<dyn HelmholtzEnergy>>,
     joback: Joback,
@@ -67,6 +69,9 @@ impl GcPcSaft {
                 tol: options.tol_cross_assoc,
             })),
         };
+        if !parameters.dipole_comp.is_empty() {
+            contributions.push(Box::new(Dipole::new(&parameters)))
+        }
         Self {
             parameters: parameters.clone(),
             options,
