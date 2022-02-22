@@ -189,7 +189,6 @@ fn test_dft_assoc() -> Result<(), Box<dyn Error>> {
         .pressure(5.0 * BAR)
         .build()?;
     Pore1D::new(
-        &func,
         AxisGeometry::Cartesian,
         20.0 * ANGSTROM,
         ExternalPotential::LJ93 {

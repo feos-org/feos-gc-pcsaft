@@ -142,7 +142,7 @@ impl<D: DualNum<f64> + ScalarOperand> HelmholtzEnergyDual<D> for CrossAssociatio
             self.tol,
             None,
         )
-        .unwrap()
+        .unwrap_or_else(|_| D::from(std::f64::NAN))
             * state.volume
     }
 }
