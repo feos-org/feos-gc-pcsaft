@@ -177,11 +177,11 @@ macro_rules! impl_micelle_profile {
                 solver: Option<PyDFTSolver>,
                 max_iter: Option<usize>,
                 tol: Option<f64>,
-                verbosity: Option<PyVerbosity>,
+                verbosity: Option<Verbosity>,
             ) -> PyResult<Self> {
                 Ok(Self(self.0.clone().critical_micelle(
                         solver.map(|s| s.0).as_ref(),
-                        (max_iter, tol, verbosity.map(|v| v.0)).into(),
+                        (max_iter, tol, verbosity).into(),
                     )?,
                 ))
             }

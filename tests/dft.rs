@@ -1,9 +1,9 @@
 use approx::assert_relative_eq;
 use feos_core::parameter::IdentifierOption;
-use feos_core::{PhaseEquilibrium, State, StateBuilder};
+use feos_core::{PhaseEquilibrium, State, StateBuilder, Verbosity};
 use feos_dft::adsorption::{ExternalPotential, Pore1D, PoreSpecification};
 use feos_dft::interface::PlanarInterface;
-use feos_dft::{AxisGeometry, DFTSolver};
+use feos_dft::{DFTSolver, Geometry};
 use feos_gc_pcsaft::{
     GcPcSaft, GcPcSaftEosParameters, GcPcSaftFunctional, GcPcSaftFunctionalParameters,
 };
@@ -124,7 +124,7 @@ fn test_dft() -> Result<(), Box<dyn Error>> {
     let w = 150.0 * ANGSTROM;
     let points = 2048;
     let tc = State::critical_point(&func, None, None, Default::default())?.temperature;
-    let vle = PhaseEquilibrium::pure_t(&func, t, None, Default::default())?;
+    let vle = PhaseEquilibrium::pure(&func, t, None, Default::default())?;
     let profile = PlanarInterface::from_tanh(&vle, points, w, tc)?.solve(None)?;
     println!(
         "hetero {} {} {}",
@@ -169,7 +169,7 @@ fn test_dft_assoc() -> Result<(), Box<dyn Error>> {
     let t = 300.0 * KELVIN;
     let w = 100.0 * ANGSTROM;
     let points = 4096;
-    let vle = PhaseEquilibrium::pure_t(&func, t, None, Default::default())?;
+    let vle = PhaseEquilibrium::pure(&func, t, None, Default::default())?;
     let profile = PlanarInterface::from_tanh(&vle, points, w, 600.0 * KELVIN)?.solve(None)?;
     println!(
         "hetero {} {} {}",
@@ -178,18 +178,17 @@ fn test_dft_assoc() -> Result<(), Box<dyn Error>> {
         vle.liquid().density,
     );
 
-    let solver = DFTSolver::new()
+    let solver = DFTSolver::new(Verbosity::Iter)
         .picard_iteration(None)
         .beta(0.05)
         .tol(1e-5)
-        .anderson_mixing(None)
-        .output();
+        .anderson_mixing(None);
     let bulk = StateBuilder::new(&func)
         .temperature(t)
         .pressure(5.0 * BAR)
         .build()?;
     Pore1D::new(
-        AxisGeometry::Cartesian,
+        Geometry::Cartesian,
         20.0 * ANGSTROM,
         ExternalPotential::LJ93 {
             epsilon_k_ss: 10.0,
@@ -199,7 +198,7 @@ fn test_dft_assoc() -> Result<(), Box<dyn Error>> {
         None,
         None,
     )
-    .initialize(&bulk, None)?
+    .initialize(&bulk, None, None)?
     .solve(Some(&solver))?;
     Ok(())
 }

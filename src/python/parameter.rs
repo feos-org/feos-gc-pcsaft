@@ -44,10 +44,7 @@ impl PyGcPcSaftRecord {
             psi_dft,
         ))
     }
-}
 
-#[pyproto]
-impl pyo3::class::basic::PyObjectProtocol for PyGcPcSaftRecord {
     fn __repr__(&self) -> PyResult<String> {
         Ok(self.0.to_string())
     }
@@ -76,10 +73,7 @@ impl PyGcPcSaftEosParameters {
     fn _repr_markdown_(&self) -> String {
         self.0.to_markdown()
     }
-}
 
-#[pyproto]
-impl pyo3::class::basic::PyObjectProtocol for PyGcPcSaftEosParameters {
     fn __repr__(&self) -> PyResult<String> {
         Ok(self.0.to_string())
     }
@@ -119,10 +113,7 @@ impl PyGcPcSaftFunctionalParameters {
     fn get_k_ij<'py>(&self, py: Python<'py>) -> &'py PyArray2<f64> {
         self.0.k_ij.view().to_pyarray(py)
     }
-}
 
-#[pyproto]
-impl pyo3::class::basic::PyObjectProtocol for PyGcPcSaftFunctionalParameters {
     fn __repr__(&self) -> PyResult<String> {
         Ok(self.0.to_string())
     }

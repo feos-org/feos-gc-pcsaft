@@ -1,6 +1,6 @@
-use feos_core::{Contributions, EosError, EosResult, EosUnit, State, StateBuilder, VLEOptions};
+use feos_core::{Contributions, EosError, EosResult, EosUnit, SolverOptions, State, StateBuilder};
 use feos_dft::{
-    Axis, AxisGeometry, ConvolverFFT, DFTProfile, DFTSolver, DFTSpecification, Grid,
+    Axis, ConvolverFFT, DFTProfile, DFTSolver, DFTSpecification, Geometry, Grid,
     HelmholtzEnergyFunctional, WeightFunctionInfo, DFT,
 };
 use ndarray::prelude::*;
@@ -10,6 +10,15 @@ use std::rc::Rc;
 pub enum MicelleInitialization<U> {
     ExternalPotential(f64, f64),
     Density(QuantityArray2<U>),
+}
+
+impl<U> MicelleInitialization<U> {
+    fn density(&self) -> Option<&QuantityArray2<U>> {
+        match self {
+            Self::ExternalPotential(_, _) => None,
+            Self::Density(density) => Some(density),
+        }
+    }
 }
 
 pub enum MicelleSpecification<U> {
@@ -140,8 +149,8 @@ impl<U: EosUnit + 'static, F: HelmholtzEnergyFunctional> MicelleProfile<U, F> {
 
         // initialize convolver
         let grid = match axis.geometry {
-            AxisGeometry::Spherical => Grid::Spherical(axis),
-            AxisGeometry::Polar => Grid::Polar(axis),
+            Geometry::Spherical => Grid::Spherical(axis),
+            Geometry::Cylindrical => Grid::Polar(axis),
             _ => unreachable!(),
         };
         let contributions = dft.functional.contributions();
@@ -152,12 +161,13 @@ impl<U: EosUnit + 'static, F: HelmholtzEnergyFunctional> MicelleProfile<U, F> {
         let convolver = ConvolverFFT::plan(&grid, &weight_functions, Some(1));
 
         // create profile
-        let mut profile = DFTProfile::new(grid, convolver, bulk, Some(external_potential))?;
-
-        // initialize density
-        if let MicelleInitialization::Density(initial_density) = initialization {
-            profile.density = initial_density;
-        }
+        let mut profile = DFTProfile::new(
+            grid,
+            convolver,
+            bulk,
+            Some(external_potential),
+            initialization.density(),
+        )?;
 
         // specify specification
         profile.specification = Rc::new(specification);
@@ -215,7 +225,7 @@ impl<U: EosUnit + 'static, F: HelmholtzEnergyFunctional> MicelleProfile<U, F> {
     pub fn critical_micelle(
         mut self,
         solver: Option<&DFTSolver>,
-        options: VLEOptions,
+        options: SolverOptions,
     ) -> EosResult<Self> {
         let n_grid = self.profile.r().len();
         let temperature = self.profile.bulk.temperature;

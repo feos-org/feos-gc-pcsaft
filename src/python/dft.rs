@@ -2,12 +2,9 @@ use super::parameter::*;
 use crate::dft::GcPcSaftFunctional;
 use crate::impl_micelle_profile;
 use crate::micelles::*;
-use feos_core::python::{PyContributions, PyVerbosity};
-use feos_core::utils::{
-    DataSet, EquilibriumLiquidDensity, Estimator, LiquidDensity, VaporPressure,
-};
 use feos_core::*;
 use feos_dft::adsorption::*;
+use feos_dft::fundamental_measure_theory::FMTVersion;
 use feos_dft::interface::*;
 use feos_dft::python::*;
 use feos_dft::solvation::*;
@@ -47,9 +44,7 @@ impl_equation_of_state!(PyGcPcSaftFunctional);
 
 impl_state!(DFT<GcPcSaftFunctional>, PyGcPcSaftFunctional);
 impl_state_molarweight!(DFT<GcPcSaftFunctional>, PyGcPcSaftFunctional);
-impl_vle_state!(DFT<GcPcSaftFunctional>, PyGcPcSaftFunctional);
-
-impl_estimator!(DFT<GcPcSaftFunctional>, PyGcPcSaftFunctional);
+impl_phase_equilibrium!(DFT<GcPcSaftFunctional>, PyGcPcSaftFunctional);
 
 impl_planar_interface!(GcPcSaftFunctional);
 impl_surface_tension_diagram!(GcPcSaftFunctional);
@@ -62,15 +57,13 @@ impl_solvation_profile!(GcPcSaftFunctional);
 impl_micelle_profile!(GcPcSaftFunctional);
 
 #[pymodule]
-pub fn gc_pcsaft_dft(py: Python<'_>, m: &PyModule) -> PyResult<()> {
+pub fn gc_pcsaft_dft(_: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_class::<PyGcPcSaftFunctional>()?;
     m.add_class::<PyState>()?;
-    m.add_class::<PyPhaseDiagramPure>()?;
-    m.add_class::<PyPhaseDiagramBinary>()?;
-    m.add_class::<PyPhaseDiagramHetero>()?;
+    m.add_class::<PyPhaseDiagram>()?;
     m.add_class::<PyPhaseEquilibrium>()?;
     m.add_class::<PyPlanarInterface>()?;
-    m.add_class::<PyGeometry>()?;
+    m.add_class::<Geometry>()?;
     m.add_class::<PyPore1D>()?;
     m.add_class::<PyPore3D>()?;
     m.add_class::<PyExternalPotential>()?;
@@ -79,12 +72,8 @@ pub fn gc_pcsaft_dft(py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_class::<PySurfaceTensionDiagram>()?;
     m.add_class::<PyDFTSolver>()?;
     m.add_class::<PySolvationProfile>()?;
-    m.add_class::<PyFMTVersion>()?;
+    m.add_class::<FMTVersion>()?;
     m.add_class::<PyMicelleProfile>()?;
 
-    let utils = PyModule::new(py, "utils")?;
-    utils.add_class::<PyDataSet>()?;
-    utils.add_class::<PyEstimator>()?;
-    m.add_submodule(utils)?;
     Ok(())
 }
