@@ -45,7 +45,7 @@ impl<U: EosUnit, F: HelmholtzEnergyFunctional> DFTSpecification<U, Ix1, F>
                 delta_n_surfactant,
                 pressure,
             } => {
-                let m = &profile.dft.m;
+                let m: &Array1<_> = &profile.dft.m();
                 let rho_s_bulk = bulk.partial_density.get(1);
                 let rho_w_bulk = bulk.partial_density.get(0);
                 let f_bulk = bulk.helmholtz_energy(Contributions::Total) / bulk.volume;
@@ -138,7 +138,7 @@ impl<U: EosUnit + 'static, F: HelmholtzEnergyFunctional> MicelleProfile<U, F> {
 
         // calculate external potential
         let t = bulk.temperature.to_reduced(U::reference_temperature())?;
-        let mut external_potential = Array2::zeros((dft.component_index.len(), axis.grid.len()));
+        let mut external_potential = Array2::zeros((dft.component_index().len(), axis.grid.len()));
         if let MicelleInitialization::ExternalPotential(peak, width) = initialization {
             external_potential.index_axis_mut(Axis(0), 0).assign(
                 &axis
@@ -153,7 +153,7 @@ impl<U: EosUnit + 'static, F: HelmholtzEnergyFunctional> MicelleProfile<U, F> {
             Geometry::Cylindrical => Grid::Polar(axis),
             _ => unreachable!(),
         };
-        let contributions = dft.functional.contributions();
+        let contributions = dft.contributions();
         let weight_functions: Vec<WeightFunctionInfo<f64>> = contributions
             .iter()
             .map(|c| c.weight_functions(t))
@@ -232,7 +232,7 @@ impl<U: EosUnit + 'static, F: HelmholtzEnergyFunctional> MicelleProfile<U, F> {
         let t = temperature.to_reduced(U::reference_temperature())?;
         let pressure = self.profile.bulk.pressure(Contributions::Total);
         let eos = self.profile.bulk.eos.clone();
-        let indices = self.profile.bulk.eos.component_index.clone();
+        let indices = self.profile.bulk.eos.component_index().into_owned();
         self.profile.specification = Rc::new(MicelleSpecification::ChemicalPotential);
 
         for _ in 0..options.max_iter.unwrap_or(MAX_ITER_MICELLE) {
@@ -267,7 +267,6 @@ impl<U: EosUnit + 'static, F: HelmholtzEnergyFunctional> MicelleProfile<U, F> {
                 .pressure(pressure)
                 .molefracs(&arr1(&[1.0 - x, x]))
                 .build()?;
-            self.profile.chemical_potential = bulk.chemical_potential(Contributions::Total);
 
             // update density profile
             for (i, &j) in indices.iter().enumerate() {

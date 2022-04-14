@@ -55,7 +55,7 @@ where
             .add(
                 WeightFunction {
                     prefactor: p.m.mapv(N::from),
-                    kernel_radius: r.clone(),
+                    kernel_radius: r,
                     shape: WeightFunctionShape::Theta,
                 },
                 true,

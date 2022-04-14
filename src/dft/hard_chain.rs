@@ -27,7 +27,7 @@ impl<N: DualNum<f64> + ScalarOperand> FunctionalContributionDual<N> for ChainFun
     fn weight_functions(&self, temperature: N) -> WeightFunctionInfo<N> {
         let p = &self.parameters;
         let d = p.hs_diameter(temperature);
-        WeightFunctionInfo::new(p.component_index().clone(), true)
+        WeightFunctionInfo::new(p.component_index(), true)
             .add(
                 WeightFunction {
                     prefactor: p.chain_length().mapv(|m| m.into()) / (&d * 8.0),
@@ -39,7 +39,7 @@ impl<N: DualNum<f64> + ScalarOperand> FunctionalContributionDual<N> for ChainFun
             .add(
                 WeightFunction {
                     prefactor: p.chain_length().mapv(|m| (m / 8.0).into()),
-                    kernel_radius: d.clone(),
+                    kernel_radius: d,
                     shape: WeightFunctionShape::Theta,
                 },
                 true,

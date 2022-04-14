@@ -1,3 +1,4 @@
+#![allow(clippy::excessive_precision)]
 use approx::assert_relative_eq;
 use feos_core::parameter::IdentifierOption;
 use feos_core::{PhaseEquilibrium, State, StateBuilder, Verbosity};
@@ -49,13 +50,13 @@ fn test_bulk_implementation() -> Result<(), Box<dyn Error>> {
 
     println!("{:29}: {}", p_eos[0].0, p_eos[0].1);
     println!("{:29}: {}", p_func[0].0, p_func[0].1);
-    println!("");
+    println!();
     println!("{:29}: {}", p_eos[1].0, p_eos[1].1);
     println!("{:29}: {}", p_func[1].0, p_func[1].1);
-    println!("");
+    println!();
     println!("{:29}: {}", p_eos[2].0, p_eos[2].1);
     println!("{:29}: {}", p_func[2].0, p_func[2].1);
-    println!("");
+    println!();
     println!("{:29}: {}", p_eos[3].0, p_eos[3].1);
     println!("{:29}: {}", p_func[3].0, p_func[3].1);
 

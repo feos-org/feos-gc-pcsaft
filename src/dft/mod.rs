@@ -2,7 +2,7 @@ use crate::eos::GcPcSaftOptions;
 use feos_core::MolarWeight;
 use feos_dft::adsorption::FluidParameters;
 use feos_dft::fundamental_measure_theory::{FMTContribution, FMTProperties, FMTVersion};
-use feos_dft::{FunctionalContribution, HelmholtzEnergyFunctional, DFT};
+use feos_dft::{FunctionalContribution, HelmholtzEnergyFunctional, MoleculeShape, DFT};
 use ndarray::Array1;
 use num_dual::DualNum;
 use petgraph::graph::UnGraph;
@@ -65,18 +65,21 @@ impl GcPcSaftFunctional {
             contributions.push(Box::new(assoc));
         }
 
-        let func = Self {
-            parameters: parameters.clone(),
+        (Self {
+            parameters,
             fmt_version,
             options: saft_options,
             contributions,
-        };
-
-        DFT::new_heterosegmented(func, &parameters.component_index)
+        })
+        .into()
     }
 }
 
 impl HelmholtzEnergyFunctional for GcPcSaftFunctional {
+    fn molecule_shape(&self) -> MoleculeShape {
+        MoleculeShape::Heterosegmented(&self.parameters.component_index)
+    }
+
     fn subset(&self, component_list: &[usize]) -> DFT<Self> {
         Self::with_options(
             Rc::new(self.parameters.subset(component_list)),
@@ -139,9 +142,5 @@ impl FluidParameters for GcPcSaftFunctional {
 
     fn sigma_ff(&self) -> &Array1<f64> {
         &self.parameters.sigma
-    }
-
-    fn m(&self) -> Array1<f64> {
-        Array1::ones(self.parameters.m.len())
     }
 }
