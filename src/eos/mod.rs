@@ -18,10 +18,14 @@ use hard_sphere::HardSphere;
 pub use parameter::GcPcSaftEosParameters;
 use polar::Dipole;
 
+/// Customization options for the gc-PC-SAFT equation of state and functional.
 #[derive(Copy, Clone)]
 pub struct GcPcSaftOptions {
+    /// maximum packing fraction
     pub max_eta: f64,
+    /// maximum number of iterations for cross association calculation
     pub max_iter_cross_assoc: usize,
+    /// tolerance for cross association calculation
     pub tol_cross_assoc: f64,
 }
 
@@ -35,6 +39,7 @@ impl Default for GcPcSaftOptions {
     }
 }
 
+/// gc-PC-SAFT equation of state
 pub struct GcPcSaft {
     pub parameters: Rc<GcPcSaftEosParameters>,
     options: GcPcSaftOptions,

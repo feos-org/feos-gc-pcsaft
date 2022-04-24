@@ -10,7 +10,6 @@ use quantity::si::{SIArray1, SIUnit, GRAM, MOL};
 use std::f64::consts::FRAC_PI_6;
 use std::rc::Rc;
 
-// mod hard_chain;
 mod association;
 mod dispersion;
 mod hard_chain;
@@ -20,6 +19,7 @@ use dispersion::AttractiveFunctional;
 use hard_chain::ChainFunctional;
 pub use parameter::GcPcSaftFunctionalParameters;
 
+/// gc-PC-SAFT Helmholtz energy functional.
 pub struct GcPcSaftFunctional {
     pub parameters: Rc<GcPcSaftFunctionalParameters>,
     fmt_version: FMTVersion,

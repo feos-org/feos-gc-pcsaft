@@ -16,6 +16,7 @@ use std::path::Path;
 /// psi Parameter for heterosegmented DFT (Mairhofer2018)
 const PSI_GC_DFT: f64 = 1.5357;
 
+/// Parameter set required for the gc-PC-SAFT Helmholtz energy functional.
 pub struct GcPcSaftFunctionalParameters {
     pub molarweight: Array1<f64>,
     pub component_index: Array1<usize>,

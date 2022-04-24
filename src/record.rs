@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-/// gc-PC-SAFT parameter set.
+/// gc-PC-SAFT pure-component parameters.
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GcPcSaftRecord {
     /// Segment shape factor
@@ -13,18 +13,23 @@ pub struct GcPcSaftRecord {
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mu: Option<f64>,
+    /// association volume parameter
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kappa_ab: Option<f64>,
+    /// association energy parameter
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub epsilon_k_ab: Option<f64>,
+    /// \# of association sites of type A
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub na: Option<f64>,
+    /// \# of association sites of type B
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nb: Option<f64>,
+    /// interaction range parameter for the dispersion functional
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub psi_dft: Option<f64>,
