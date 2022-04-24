@@ -36,7 +36,7 @@ impl GcPcSaftFunctional {
         )
     }
 
-    fn with_options(
+    pub fn with_options(
         parameters: Rc<GcPcSaftFunctionalParameters>,
         fmt_version: FMTVersion,
         saft_options: GcPcSaftOptions,

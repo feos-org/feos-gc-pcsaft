@@ -22,8 +22,8 @@ fn test_bulk_implementation() -> Result<(), Box<dyn Error>> {
 
     let parameters = GcPcSaftEosParameters::from_json_segments(
         &["propane"],
-        "parameters/non_associating.json",
-        "parameters/parameters_hetero_segments.json",
+        "parameters/gc_substances.json",
+        "parameters/sauer2014_hetero.json",
         None,
         IdentifierOption::Name,
     )
@@ -31,8 +31,8 @@ fn test_bulk_implementation() -> Result<(), Box<dyn Error>> {
 
     let parameters_func = GcPcSaftFunctionalParameters::from_json_segments(
         &["propane"],
-        "parameters/non_associating.json",
-        "parameters/parameters_hetero_segments.json",
+        "parameters/gc_substances.json",
+        "parameters/sauer2014_hetero.json",
         None,
         IdentifierOption::Name,
     )
@@ -113,8 +113,8 @@ fn test_dft() -> Result<(), Box<dyn Error>> {
 
     let parameters = GcPcSaftFunctionalParameters::from_json_segments(
         &["propane"],
-        "parameters/non_associating.json",
-        "parameters/parameters_hetero_segments.json",
+        "parameters/gc_substances.json",
+        "parameters/sauer2014_hetero.json",
         None,
         IdentifierOption::Name,
     )
@@ -159,8 +159,8 @@ fn test_dft() -> Result<(), Box<dyn Error>> {
 fn test_dft_assoc() -> Result<(), Box<dyn Error>> {
     let parameters = GcPcSaftFunctionalParameters::from_json_segments(
         &["1-pentanol"],
-        "parameters/associating.json",
-        "parameters/parameters_hetero_segments.json",
+        "parameters/gc_substances.json",
+        "parameters/sauer2014_hetero.json",
         None,
         IdentifierOption::Name,
     )

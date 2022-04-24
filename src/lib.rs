@@ -3,6 +3,7 @@
 
 mod dft;
 mod eos;
+#[cfg(feature = "micelles")]
 pub mod micelles;
 mod record;
 pub use dft::{GcPcSaftFunctional, GcPcSaftFunctionalParameters};
