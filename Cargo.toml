@@ -3,6 +3,14 @@ name = "feos-gc-pcsaft"
 version = "0.1.0"
 authors = ["Philipp Rehner <prehner@ethz.ch>", "Gernot Bauer <bauer@itt.uni-stuttgart.de>"]
 edition = "2018"
+license = "MIT OR Apache-2.0"
+description = "Implementation of the (heterosegmented) gc-PC-SAFT equation of state and corresponding Helmholtz energy functional."
+homepage = "https://github.com/feos-org"
+readme = "README.md"
+repository = "https://github.com/feos-org/feos-gc-pcsaft"
+keywords = ["physics", "thermodynamics", "equations_of_state", "phase_equilibria", "SAFT"]
+categories = ["science"]
+exclude = ["/.github/*", "*.ipynb", "/examples/*", "/parameters/*"]
 
 [dependencies]
 quantity = "0.5"
