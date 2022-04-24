@@ -12,7 +12,7 @@ use dft::__PYO3_PYMODULE_DEF_DFT;
 use eos::__PYO3_PYMODULE_DEF_EOS;
 
 #[pymodule]
-pub fn feos_pcsaft(py: Python<'_>, m: &PyModule) -> PyResult<()> {
+pub fn feos_gc_pcsaft(py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_class::<PyIdentifier>()?;
     m.add_class::<Verbosity>()?;
     m.add_class::<Contributions>()?;
