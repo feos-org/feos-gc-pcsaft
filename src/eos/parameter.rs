@@ -11,6 +11,7 @@ use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
 
+/// Parameter set required for the gc-PC-SAFT equation of state.
 pub struct GcPcSaftEosParameters {
     pub molarweight: Array1<f64>,
     pub component_index: Array1<usize>,

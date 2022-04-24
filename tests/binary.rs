@@ -12,16 +12,16 @@ use std::rc::Rc;
 fn test_binary() -> EosResult<()> {
     let parameters = GcPcSaftEosParameters::from_json_segments(
         &["ethanol", "methanol"],
-        "parameters/associating.json",
-        "parameters/parameters_hetero_segments.json",
+        "parameters/gc_substances.json",
+        "parameters/sauer2014_hetero.json",
         None,
         IdentifierOption::Name,
     )
     .unwrap();
     let parameters_func = GcPcSaftFunctionalParameters::from_json_segments(
         &["ethanol", "methanol"],
-        "parameters/associating.json",
-        "parameters/parameters_hetero_segments.json",
+        "parameters/gc_substances.json",
+        "parameters/sauer2014_hetero.json",
         None,
         IdentifierOption::Name,
     )

@@ -4,10 +4,6 @@ version = "0.1.0"
 authors = ["Philipp Rehner <prehner@ethz.ch>", "Gernot Bauer <bauer@itt.uni-stuttgart.de>"]
 edition = "2018"
 
-[lib]
-name = "feos_gc_pcsaft"
-crate-type = ["rlib", "cdylib"]
-
 [dependencies]
 quantity = "0.5"
 feos-core = "0.2"
@@ -22,15 +18,12 @@ lazy_static = "1.4.0"
 thiserror = "1.0"
 petgraph = "0.6"
 numpy = { version = "0.16", optional = true }
+pyo3 = { version = "0.16", optional = true }
 
 [dev-dependencies]
 approx = "0.4"
 
-[dependencies.pyo3]
-version = "0.16"
-features = ["extension-module", "abi3", "abi3-py37"]
-optional = true
-
 [features]
 default = []
 python = ["pyo3", "numpy", "feos-dft/python"]
+micelles = []

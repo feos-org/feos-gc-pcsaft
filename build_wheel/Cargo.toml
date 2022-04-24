@@ -1,0 +1,16 @@
+[package]
+name = "feos_gc_pcsaft"
+version = "0.1.0"
+authors = ["Philipp Rehner <prehner@ethz.ch", "Gernot Bauer <bauer@itt.uni-stuttgart.de>"]
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+quantity = "0.5"
+feos-core = "0.2"
+feos-dft = "0.2"
+feos-gc-pcsaft = { path = "..", features = ["python", "micelles"] }
+pyo3 = { version = "0.16", features = ["extension-module", "abi3", "abi3-py37"] }
+numpy = "0.16"
