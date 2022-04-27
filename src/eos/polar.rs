@@ -69,7 +69,7 @@ impl Dipole {
         let f2_term = Array2::from_shape_fn([ndipole; 2], |(i, j)| {
             let di = parameters.dipole_comp[i];
             let dj = parameters.dipole_comp[j];
-            parameters.mu2[i] * parameters.mu2[j] / parameters.sigma_ij[[di, dj]].powi(3)
+            parameters.mu2[i] * parameters.mu2[j] / parameters.s_ij[[di, dj]].powi(3)
         });
 
         let f3_term = Array3::from_shape_fn([ndipole; 3], |(i, j, k)| {
@@ -77,9 +77,9 @@ impl Dipole {
             let dj = parameters.dipole_comp[j];
             let dk = parameters.dipole_comp[k];
             parameters.mu2[i] * parameters.mu2[j] * parameters.mu2[k]
-                / (parameters.sigma_ij[[di, dj]]
-                    * parameters.sigma_ij[[di, dk]]
-                    * parameters.sigma_ij[[dj, dk]])
+                / (parameters.s_ij[[di, dj]]
+                    * parameters.s_ij[[di, dk]]
+                    * parameters.s_ij[[dj, dk]])
         });
 
         let mut mij1 = Array2::zeros((ndipole, ndipole));

@@ -1,6 +1,6 @@
 [package]
 name = "feos-gc-pcsaft"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Philipp Rehner <prehner@ethz.ch>", "Gernot Bauer <bauer@itt.uni-stuttgart.de>"]
 edition = "2018"
 license = "MIT OR Apache-2.0"

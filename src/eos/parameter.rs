@@ -33,6 +33,7 @@ pub struct GcPcSaftEosParameters {
     mu: Array1<f64>,
     pub mu2: Array1<f64>,
     pub m_mix: Array1<f64>,
+    pub s_ij: Array2<f64>,
     pub e_k_ij: Array2<f64>,
 
     pub k_ij: Array2<f64>,
@@ -76,6 +77,8 @@ impl GcPcSaftEosParameters {
         let mut mu = Vec::new();
         let mut mu2 = Vec::new();
         let mut m_mix = Vec::new();
+        let mut sigma_mix = Vec::new();
+        let mut epsilon_k_mix = Vec::new();
 
         let mut joback_records = Vec::new();
 
@@ -93,6 +96,8 @@ impl GcPcSaftEosParameters {
                 .collect::<Result<_, ParameterError>>()?;
 
             let mut m_i = 0.0;
+            let mut sigma_i = 0.0;
+            let mut epsilon_k_i = 0.0;
             let mut mu2_i = 0.0;
 
             for (segment, count) in count.iter() {
@@ -119,6 +124,8 @@ impl GcPcSaftEosParameters {
                 }
 
                 m_i += segment.model_record.m * count;
+                sigma_i += segment.model_record.m * segment.model_record.sigma.powi(3) * count;
+                epsilon_k_i += segment.model_record.m * segment.model_record.epsilon_k * count;
                 if let Some(mu) = segment.model_record.mu {
                     mu2_i += mu.powi(2) * count;
                 }
@@ -127,8 +134,10 @@ impl GcPcSaftEosParameters {
             if mu2_i > 0.0 {
                 dipole_comp.push(i);
                 mu.push(mu2_i.sqrt());
-                mu2.push(mu2_i / m_i / (1e-19 * (JOULE / KELVIN / KB).into_value().unwrap()));
+                mu2.push(mu2_i / m_i * (1e-19 * (JOULE / KELVIN / KB).into_value().unwrap()));
                 m_mix.push(m_i);
+                sigma_mix.push((sigma_i / m_i).cbrt());
+                epsilon_k_mix.push(epsilon_k_i / m_i);
             }
 
             for (b, &count) in bond_counts.iter() {
@@ -181,10 +190,17 @@ impl GcPcSaftEosParameters {
         // Combining rules dispersion
         let sigma_ij =
             Array2::from_shape_fn([sigma.len(); 2], |(i, j)| 0.5 * (sigma[i] + sigma[j]));
-        let e_k_ij = Array2::from_shape_fn([epsilon_k.len(); 2], |(i, j)| {
+        let epsilon_k_ij = Array2::from_shape_fn([epsilon_k.len(); 2], |(i, j)| {
             (epsilon_k[i] * epsilon_k[j]).sqrt()
+        }) * (1.0 - &k_ij);
+
+        // Combining rules polar
+        let s_ij = Array2::from_shape_fn([dipole_comp.len(); 2], |(i, j)| {
+            0.5 * (sigma_mix[i] + sigma_mix[j])
         });
-        let epsilon_k_ij = &e_k_ij * (1.0 - &k_ij);
+        let e_k_ij = Array2::from_shape_fn([dipole_comp.len(); 2], |(i, j)| {
+            (epsilon_k_mix[i] * epsilon_k_mix[j]).sqrt()
+        });
 
         // Association
         let sigma3_kappa_aibj = Array2::from_shape_fn([kappa_ab.len(); 2], |(i, j)| {
@@ -213,6 +229,7 @@ impl GcPcSaftEosParameters {
             mu: Array1::from_vec(mu),
             mu2: Array1::from_vec(mu2),
             m_mix: Array1::from_vec(m_mix),
+            s_ij,
             e_k_ij,
             k_ij,
             sigma_ij,
